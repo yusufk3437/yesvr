@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YES VR - Rezervasyon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: white; }
+        .hidden-step { display: none; }
+        .yellow-btn { background-color: #FACC15; color: black; transition: all 0.2s; }
+        .yellow-btn:active { transform: scale(0.98); }
+        
+        /* Özel Checkbox/Radio stilleri */
+        .session-card { border: 2px solid #27272a; transition: all 0.2s; }
+        .session-card.selected { border-color: #FACC15; background-color: #18181b; }
+        
+        .time-pill { border: 1px solid #27272a; color: #a1a1aa; }
+        .time-pill.selected { background-color: #FACC15; color: black; border-color: #FACC15; font-weight: bold; }
+    </style>
+</head>
+<body class="antialiased">
+
+<div class="max-w-md mx-auto bg-[#111111] min-h-screen relative shadow-2xl overflow-hidden pb-24">
+    
+    <!-- ADIM 1: KEŞFET / LOBİ -->
+    <div id="step-1">
+        <!-- Hero Section -->
+        <div class="relative h-64 bg-gradient-to-b from-gray-800 to-[#111111] p-5 flex flex-col justify-between">
+            <div class="flex items-center gap-1 mt-2">
+                <div class="bg-[#FACC15] text-black font-black text-xl px-2 py-1 tracking-widest">Y E S</div>
+                <div class="bg-[#FACC15] text-black font-black text-xl px-2 py-1 tracking-widest">V R</div>
+            </div>
+            
+            <div>
+                <p class="text-[#FACC15] font-bold text-sm tracking-widest mb-1">YES VR ARENA</p>
+                <h1 class="text-4xl font-black leading-tight">Takımını bul.<br><span class="text-[#FACC15]">Arenaya gir.</span></h1>
+                <p class="text-gray-400 text-sm mt-2">20 dk oyun • 30 dk toplam • 10 oyuncu</p>
+            </div>
+        </div>
+
+        <div class="px-5 mt-4">
+            <h2 class="font-bold text-lg mb-3">Oyuncu arayan seanslar</h2>
+            
+            <!-- Tarih Seçici -->
+            <div class="flex gap-3 overflow-x-auto pb-2 mb-4 scrollbar-hide text-sm">
+                <button class="bg-[#FACC15] text-black font-bold px-4 py-1.5 rounded-full whitespace-nowrap">Bugün</button>
+                <button class="border border-gray-700 text-gray-300 px-4 py-1.5 rounded-full whitespace-nowrap">Yarın</button>
+                <button class="border border-gray-700 text-gray-300 px-4 py-1.5 rounded-full whitespace-nowrap">26 Nis</button>
+                <button class="border border-gray-700 text-gray-300 px-4 py-1.5 rounded-full whitespace-nowrap">27 Nis</button>
+            </div>
+
+            <!-- Açık Seans Kartı 1 -->
+            <div class="bg-[#18181b] border border-gray-800 rounded-2xl p-4 mb-4">
+                <div class="flex gap-4">
+                    <div class="bg-[#FACC15] text-black font-black text-xl px-3 py-1 rounded-lg h-fit">15:00</div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="text-green-500 text-sm font-semibold">Açık seans</span>
+                        </div>
+                        <p class="text-gray-300 text-sm flex items-center gap-2">👤 6 / 10 oyuncu</p>
+                        <p class="text-gray-400 text-sm flex items-center gap-2 mt-1">🔓 4 yer kaldı</p>
+                        <p class="text-xs text-gray-500 mt-2 bg-gray-800 inline-block px-2 py-1 rounded">🎮 Mevcut grup: 22 yaş, Erkek</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-between items-center border-t border-gray-800 pt-4">
+                    <div class="text-sm">Kişi başı <span class="text-[#FACC15] font-bold text-lg">350 TL</span></div>
+                    <button onclick="goToStep(2)" class="yellow-btn font-bold py-2 px-5 rounded-xl">Seansa katıl →</button>
+                </div>
+            </div>
+            
+            <!-- Açık Seans Kartı 2 -->
+            <div class="bg-[#18181b] border border-gray-800 rounded-2xl p-4 mb-4">
+                <div class="flex gap-4">
+                    <div class="bg-[#FACC15] text-black font-black text-xl px-3 py-1 rounded-lg h-fit">15:30</div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="text-green-500 text-sm font-semibold">Açık seans</span>
+                        </div>
+                        <p class="text-gray-300 text-sm flex items-center gap-2">👤 4 / 10 oyuncu</p>
+                        <p class="text-gray-400 text-sm flex items-center gap-2 mt-1">🔓 6 yer kaldı</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-between items-center border-t border-gray-800 pt-4">
+                    <div class="text-sm">Kişi başı <span class="text-[#FACC15] font-bold text-lg">350 TL</span></div>
+                    <button onclick="goToStep(2)" class="yellow-btn font-bold py-2 px-5 rounded-xl">Seansa katıl →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADIM 2: SEANS SEÇİMİ -->
+    <div id="step-2" class="hidden-step p-5">
+        <div class="flex items-center gap-4 mb-6">
+            <button onclick="goToStep(1)" class="text-gray-400 text-xl">←</button>
+            <div class="flex items-center gap-1">
+                <div class="bg-[#FACC15] text-black font-black text-sm px-1.5 py-0.5">Y E S</div>
+                <div class="bg-[#FACC15] text-black font-black text-sm px-1.5 py-0.5">V R</div>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-6">Seansını seç</h2>
+        
+        <!-- Stepper -->
+        <div class="flex items-center justify-center mb-8 text-sm">
+            <div class="flex items-center gap-2 text-[#FACC15] font-bold">
+                <div class="w-6 h-6 rounded-full bg-[#FACC15] text-black flex items-center justify-center">1</div>
+                Seans
+            </div>
+            <div class="w-8 h-[1px] bg-gray-600 mx-3"></div>
+            <div class="flex items-center gap-2 text-gray-500">
+                <div class="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center">2</div>
+                Ödeme
+            </div>
+        </div>
+
+        <!-- Kişi Sayısı -->
+        <div class="mb-8">
+            <h3 class="font-semibold mb-3">Kaç kişi katılacaksın?</h3>
+            <div class="flex items-center justify-between bg-[#18181b] p-2 rounded-2xl border border-gray-800">
+                <button onclick="updatePlayer(-1)" class="w-12 h-12 bg-[#27272a] rounded-xl text-2xl flex items-center justify-center hover:bg-gray-700 transition">-</button>
+                <span id="player-count-display" class="font-bold text-xl">2 kişi</span>
+                <button onclick="updatePlayer(1)" class="w-12 h-12 bg-[#27272a] rounded-xl text-2xl flex items-center justify-center hover:bg-gray-700 transition">+</button>
+            </div>
+        </div>
+
+        <!-- Seans Türü -->
+        <div class="mb-8">
+            <h3 class="font-semibold mb-3">Seans türü</h3>
+            <div class="grid grid-cols-2 gap-3">
+                <div onclick="selectType('open')" id="type-open" class="session-card selected cursor-pointer rounded-2xl p-4 flex flex-col items-start relative">
+                    <div id="check-open" class="absolute top-3 right-3 w-5 h-5 bg-[#FACC15] rounded-full flex items-center justify-center text-black text-xs font-bold">✓</div>
+                    <div class="text-2xl mb-2">👥</div>
+                    <h4 class="font-bold text-md">Açık seans</h4>
+                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">Diğer gruplarla birlikte oyna.</p>
+                </div>
+                <div onclick="selectType('private')" id="type-private" class="session-card cursor-pointer rounded-2xl p-4 flex flex-col items-start relative">
+                    <div id="check-private" class="absolute top-3 right-3 w-5 h-5 bg-[#FACC15] rounded-full hidden items-center justify-center text-black text-xs font-bold">✓</div>
+                    <div class="text-2xl mb-2">🔒</div>
+                    <h4 class="font-bold text-md">Özel seans</h4>
+                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">Arena yalnızca grubunuza ayrılır (+%20).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saat Seç -->
+        <div class="mb-8">
+            <h3 class="font-semibold mb-3">Saat seç</h3>
+            <div class="flex gap-2 mb-4">
+                <button class="time-pill selected px-4 py-2 rounded-xl text-sm">15:00</button>
+                <button class="time-pill px-4 py-2 rounded-xl text-sm">15:30</button>
+                <button class="time-pill px-4 py-2 rounded-xl text-sm">16:00</button>
+                <button class="time-pill px-4 py-2 rounded-xl text-sm">16:30</button>
+            </div>
+            
+            <div id="open-warning" class="bg-[#18181b] border border-gray-800 rounded-xl p-4 flex gap-3">
+                <div class="text-xl">👥</div>
+                <div>
+                    <p class="text-sm font-semibold text-white">6 oyuncu var + sizin grubunuz <span id="warn-player-count">2</span> kişi</p>
+                    <p class="text-sm text-[#FACC15] mt-1 font-bold">Katılım sonrası 8 / 10 oyuncu</p>
+                    <p class="text-xs text-gray-400 mt-2">ⓘ Harici kişiler katılım sağlayabilir.</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="goToStep(3)" class="yellow-btn w-full font-bold py-4 rounded-2xl text-lg mt-4">Devam et →</button>
+    </div>
+
+    <!-- ADIM 3: ÖDEME VE ONAY -->
+    <div id="step-3" class="hidden-step p-5">
+        <div class="flex items-center gap-4 mb-6">
+            <button onclick="goToStep(2)" class="text-gray-400 text-xl">←</button>
+            <div class="flex items-center gap-1">
+                <div class="bg-[#FACC15] text-black font-black text-sm px-1.5 py-0.5">Y E S</div>
+                <div class="bg-[#FACC15] text-black font-black text-sm px-1.5 py-0.5">V R</div>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-6">Yerini ayırt</h2>
+        
+        <!-- Stepper -->
+        <div class="flex items-center justify-center mb-8 text-sm">
+            <div class="flex items-center gap-2 text-green-500 font-bold">
+                <div class="w-6 h-6 rounded-full bg-green-500 text-black flex items-center justify-center">✓</div>
+                Seans
+            </div>
+            <div class="w-8 h-[1px] bg-gray-600 mx-3"></div>
+            <div class="flex items-center gap-2 text-[#FACC15] font-bold">
+                <div class="w-6 h-6 rounded-full bg-[#FACC15] text-black flex items-center justify-center">2</div>
+                Ödeme
+            </div>
+        </div>
+
+        <!-- Seans Özeti -->
+        <div class="bg-[#18181b] border border-gray-800 rounded-2xl p-4 flex gap-4 mb-8">
+            <div class="w-24 h-24 bg-gray-800 rounded-xl bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&q=80&w=300');"></div>
+            <div class="flex flex-col justify-center">
+                <p class="font-bold text-lg mb-1">Bugün • 15:00</p>
+                <p class="text-sm text-gray-300 mb-1"><span id="summary-type">Açık seans</span> • <span id="summary-player">2</span> kişi</p>
+                <p class="text-xs text-gray-500">20 dk oyun + 10 dk hazırlık</p>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="mb-8">
+            <h3 class="font-semibold mb-4">Kişisel bilgilerin</h3>
+            <div class="mb-4">
+                <label class="block text-sm text-gray-400 mb-2">Ad soyad</label>
+                <input type="text" placeholder="Ad ve soyadınızı girin" class="w-full bg-[#18181b] border border-gray-800 rounded-xl px-4 py-3 text-white focus:border-[#FACC15] focus:outline-none transition">
+            </div>
+            <div>
+                <label class="block text-sm text-gray-400 mb-2">Telefon</label>
+                <input type="tel" placeholder="05XX XXX XX XX" class="w-full bg-[#18181b] border border-gray-800 rounded-xl px-4 py-3 text-white focus:border-[#FACC15] focus:outline-none transition">
+            </div>
+        </div>
+
+        <!-- Fiyat Özeti -->
+        <div class="mb-8">
+            <h3 class="font-semibold mb-4">Ödeme bilgisi</h3>
+            <div class="space-y-3 bg-[#18181b] p-4 rounded-xl border border-gray-800">
+                <div class="flex justify-between text-sm text-gray-300">
+                    <span>Toplam</span>
+                    <span id="price-total">700 TL</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg text-[#FACC15]">
+                    <span>Şimdi ödenecek (%20)</span>
+                    <span id="price-deposit">140 TL</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-300 border-t border-gray-800 pt-3">
+                    <span>Mekânda ödenecek</span>
+                    <span id="price-remaining">560 TL</span>
+                </div>
+                <div class="mt-2 text-xs text-gray-500 flex gap-2">
+                    <span>ⓘ</span>
+                    <p>Ön ödeme iade edilmez. Seans saati değişikliği en geç 6 saat öncesine kadar yapılabilir.</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="yellow-btn w-full font-bold py-4 rounded-2xl text-lg flex justify-center gap-2 mb-4">
+            <span id="btn-deposit-text">140 TL</span> öde ve ayırt →
+        </button>
+        <p class="text-center text-xs text-gray-400 flex items-center justify-center gap-1">
+            <span>🕒</span> Lütfen 15 dakika erken gelin.
+        </button>
+    </div>
+
+    <!-- Alt Navigasyon (Adım 1'de görünür) -->
+    <div id="bottom-nav" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-[#111111] border-t border-gray-800 flex justify-around py-3 pb-6 px-2 z-50">
+        <div class="flex flex-col items-center text-[#FACC15]">
+            <span class="text-2xl mb-1">🎮</span>
+            <span class="text-xs font-bold">Keşfet</span>
+        </div>
+        <div class="flex flex-col items-center text-gray-500">
+            <span class="text-2xl mb-1">📅</span>
+            <span class="text-xs">Seanslar</span>
+        </div>
+        <div class="flex flex-col items-center text-gray-500">
+            <span class="text-2xl mb-1">👤</span>
+            <span class="text-xs">Rezervasyonum</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // State değişkenleri
+    let playerCount = 2;
+    let type = 'open'; // 'open' veya 'private'
+    const basePrice = 350;
+
+    function goToStep(step) {
+        document.getElementById('step-1').classList.add('hidden-step');
+        document.getElementById('step-2').classList.add('hidden-step');
+        document.getElementById('step-3').classList.add('hidden-step');
+        
+        document.getElementById(`step-${step}`).classList.remove('hidden-step');
+
+        if(step === 1) {
+            document.getElementById('bottom-nav').style.display = 'flex';
+        } else {
+            document.getElementById('bottom-nav').style.display = 'none';
+        }
+
+        if(step === 3) calculatePrice();
+    }
+
+    function updatePlayer(change) {
+        playerCount += change;
+        if(playerCount < 1) playerCount = 1;
+        if(playerCount > 10) playerCount = 10;
+        
+        document.getElementById('player-count-display').innerText = `${playerCount} kişi`;
+        document.getElementById('warn-player-count').innerText = playerCount;
+        document.getElementById('summary-player').innerText = playerCount;
+    }
+
+    function selectType(selectedType) {
+        type = selectedType;
+        
+        const openCard = document.getElementById('type-open');
+        const privateCard = document.getElementById('type-private');
+        const openCheck = document.getElementById('check-open');
+        const privateCheck = document.getElementById('check-private');
+        const warningBox = document.getElementById('open-warning');
+
+        if(type === 'open') {
+            openCard.classList.add('selected');
+            privateCard.classList.remove('selected');
+            openCheck.classList.remove('hidden');
+            openCheck.style.display = 'flex';
+            privateCheck.style.display = 'none';
+            warningBox.style.display = 'flex';
+            document.getElementById('summary-type').innerText = 'Açık seans';
+        } else {
+            privateCard.classList.add('selected');
+            openCard.classList.remove('selected');
+            privateCheck.classList.remove('hidden');
+            privateCheck.style.display = 'flex';
+            openCheck.style.display = 'none';
+            warningBox.style.display = 'none';
+            document.getElementById('summary-type').innerText = 'Özel seans';
+        }
+    }
+
+    function calculatePrice() {
+        // Özel seans %20 daha pahalı mantığı
+        const multiplier = type === 'private' ? 1.2 : 1;
+        const total = Math.round(playerCount * basePrice * multiplier);
+        const deposit = Math.round(total * 0.20); // %20 Kapora
+        const remaining = total - deposit;
+
+        document.getElementById('price-total').innerText = `${total} TL`;
+        document.getElementById('price-deposit').innerText = `${deposit} TL`;
+        document.getElementById('price-remaining').innerText = `${remaining} TL`;
+        document.getElementById('btn-deposit-text').innerText = `${deposit} TL`;
+    }
+
+</script>
+</body>
+</html>
