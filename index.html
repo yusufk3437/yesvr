@@ -156,6 +156,8 @@ const ADMIN_PIN='2468';                 // Yalnızca demo girişi. Canlıda sunu
 const COMPANY='[İşletme ticari unvanı]'; // Yasal metinlerde görünür; canlıya çıkmadan önce doldur.
 const PRICES={20:350,40:500};           // kişi başı, KDV dahil
 const DEPOSIT_RATE=.1, CAPACITY=10, CUTOFF_MIN=60, CHANGE_HOURS=6, HOLD_MIN=15;
+// Listede bir önceki saatin seansları dahil görünür (16:00'da 15:00'dan itibaren); daha eskileri gizlenir.
+const visibleFrom=()=>Math.floor(Date.now()/3600000)*3600000-3600000;
 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=n=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:0}).format(n)+' TL';
@@ -174,7 +176,7 @@ if(!data||!Array.isArray(data.bookings)||!Array.isArray(data.seeded)||!Array.isA
 let adminOk=false;try{adminOk=sessionStorage.getItem('yes-vr-admin')==='1'}catch{}
 let selected=null, dur=20, people=2, holdTimer=null;
 let date=today();
-if(DEMO||!TIMES.some(t=>start(date,t)-Date.now()>=CUTOFF_MIN*60000))date=addDay(today(),1); // Demoda yarın: bütün saatler açık görünsün.
+if(!TIMES.some(t=>start(date,t)>=visibleFrom()))date=addDay(today(),1); // Bugünün görünür seansı kalmadıysa yarın açılır.
 const labels={pending:'Ödeme bekleniyor',confirmed:'Onaylandı',arrived:'Geldi',noshow:'Gelmedi',cancelled:'İptal'};
 
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(data));return true}catch{toast('Tarayıcı kaydı kullanılamıyor. Bu oturumdaki veriler yenileyince kaybolabilir.');return false}}
@@ -227,7 +229,7 @@ function render(){
   $('#date').value=date;$('#people').value=people;$('#minus').disabled=people<=1;$('#plus').disabled=people>=CAPACITY;
   $$('.mode').forEach(b=>{const on=Number(b.dataset.dur)===dur;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on))});
   // Süresi dolan seanslar listeden kalkar; yalnızca şu anki ve bir önceki seans görünür.
-  const filtered=TIMES.filter(t=>start(date,t)>Date.now()-60*60000&&(!$('#only-match').checked||session(date,t).count>0));
+  const filtered=TIMES.filter(t=>start(date,t)>=visibleFrom()&&(!$('#only-match').checked||session(date,t).count>0));
   $('#slot-list').innerHTML=filtered.map(time=>{
     const s=session(date,time),why=check(date,time,people,dur),ok=why==='',chosen=selected===time,closed=!!s.block,off=closed||s.carried||s.excl,d=s.dur||dur;
     const status=ok?(s.count?`${CAPACITY-s.count} yer kaldı`:'Müsait'):why;
