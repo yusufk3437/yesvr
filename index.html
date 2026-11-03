@@ -207,7 +207,7 @@ function check(day,time,n,d,exclude,who='online'){
   if(s.block)return 'Kapalı';
   if(s.carried)return 'Önceki seans sürüyor';
   if(s.excl)return 'Seans bir gruba kapalı';
-  if(s.count>0){if(d===40&&s.dur===20)return '20 dk seans'; // 20 dk'lık oyuncu 40 dk'lık seansa katılabilir, tersi olmaz.if(s.count>=CAPACITY)return 'Seans dolu';if(s.count+n>CAPACITY)return 'Yetersiz yer';return ''}
+  if(s.count>0){if(d===40&&s.dur===20)return '20 dk seans';if(s.count>=CAPACITY)return 'Seans dolu';if(s.count+n>CAPACITY)return 'Yetersiz yer';return ''}
   if(d===40){const nx=TIMES[idx(time)+1];if(!nx)return '40 dk için uygun değil';const t=session(day,nx,exclude);if(t.block||t.count>0)return '40 dk için uygun değil'}
   return ''
 }
