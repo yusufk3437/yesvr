@@ -167,11 +167,11 @@ const today=()=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Istanbul'}).fo
 const addDay=(d,n)=>{const a=new Date(d+'T12:00:00+03:00');a.setUTCDate(a.getUTCDate()+n);return new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Istanbul'}).format(a)};
 const pretty=d=>new Date(d+'T12:00:00+03:00').toLocaleDateString('tr-TR',{day:'numeric',month:'long',weekday:'long',timeZone:'Europe/Istanbul'});
 const start=(d,t)=>new Date(d+'T'+t+':00+03:00').getTime();
-const TIMES=Array.from({length:18},(_,i)=>`${String(13+Math.floor(i/2)).padStart(2,'0')}:${i%2?'30':'00'}`);
+const TIMES=Array.from({length:9},(_,i)=>`${String(13+i).padStart(2,'0')}:00`);
 const idx=t=>TIMES.indexOf(t);
 const sum=(arr,k)=>arr.reduce((n,b)=>n+b[k],0);
 const deposit=total=>Math.round(total*DEPOSIT_RATE);
-const KEY='yes-vr-demo-v3';
+const KEY='yes-vr-demo-v4';
 let data;try{data=JSON.parse(localStorage.getItem(KEY))}catch{}
 if(!data||!Array.isArray(data.bookings)||!Array.isArray(data.seeded)||!Array.isArray(data.blocks))data={bookings:[],seeded:[],blocks:[]};
 let adminOk=false;try{adminOk=sessionStorage.getItem('yes-vr-admin')==='1'}catch{}
@@ -189,7 +189,7 @@ function normPhone(v){let p=String(v).replace(/[\s()\-]/g,'').replace(/^\+90/,'0
 function sweep(){const now=Date.now();let ch=false;data.bookings.forEach(b=>{if(b.status==='pending'&&b.holdUntil&&b.holdUntil<=now){b.status='cancelled';b.reason='Ödeme süresi doldu';ch=true}});if(ch)persist();return ch}
 
 function seed(day){if(!DEMO||data.seeded.includes(day))return;
-  [['15:00',4,20,'Atlas ekibi'],['15:00',2,20,'İki arkadaş'],['15:30',4,20,'Hafta sonu ekibi'],['17:00',8,40,'Arena ekibi'],['18:30',2,20,'İlk kez VR'],['19:00',10,20,'Tam takım']]
+  [['15:00',4,20,'Atlas ekibi'],['15:00',2,20,'İki arkadaş'],['14:00',4,20,'Hafta sonu ekibi'],['17:00',8,40,'Arena ekibi'],['20:00',2,20,'İlk kez VR'],['19:00',10,20,'Tam takım']]
   .forEach(([time,n,d,name],i)=>{const total=n*PRICES[d];data.bookings.push({id:'ORNEK-'+day+'-'+i,date:day,time,people:n,dur:d,name,phone:'',total,deposit:deposit(total),status:'confirmed',paid:true,balancePaid:false,source:'online',mine:false})});
   data.blocks.push({date:day,time:'16:00',reason:'Özel etkinlik'});
   data.seeded.push(day);persist()}
