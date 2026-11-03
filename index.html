@@ -138,7 +138,7 @@ td input[type=checkbox]{vertical-align:middle}
 <div id="metrics" class="metrics"></div>
 <div class="admin-grid"><section><h2>Seans doluluğu</h2><p class="muted">Seçilen gün · kişi / 10</p><div id="occupancy"></div></section><section class="insight"><h2>Gün özeti</h2><div id="summary-lines"></div><p class="muted" data-demo>Örnek veriler gerçek işletme performansı değildir.</p></section></div>
 <div class="admin-forms">
-<section class="form-card"><h2>Yerinde satış ekle</h2><p class="muted">Kapıdan gelen müşteriyi ekle. Doluluk ve online satış otomatik güncellenir.</p><form id="walkin-form"><label for="wk-time">Seans</label><select id="wk-time"></select><div class="two"><div><label for="wk-dur">Süre</label><select id="wk-dur"><option value="20">20 dk</option><option value="40">40 dk</option></select></div><div><label for="wk-people">Kişi</label><input id="wk-people" type="number" min="1" max="10" value="1"></div></div><label for="wk-name">Ad (isteğe bağlı)</label><input id="wk-name" maxlength="50" placeholder="Yerinde müşteri" autocomplete="off"><label class="check-inline"><input type="checkbox" id="wk-paid" checked><span>Tutar POS'ta tahsil edildi</span></label><p class="error" id="wk-error" role="alert"></p><button class="btn primary full" type="submit">Satışı ekle</button></form></section>
+<section class="form-card"><h2>Yerinde satış ekle</h2><p class="muted">Kapıdan gelen müşteriyi ekle. Doluluk ve online satış otomatik güncellenir.</p><form id="walkin-form"><label for="wk-time">Seans</label><select id="wk-time"></select><div class="two"><div><label for="wk-dur">Süre</label><select id="wk-dur"><option value="20">20 dk</option><option value="40">40 dk</option></select></div><div><label for="wk-people">Kişi</label><input id="wk-people" type="number" min="1" max="10" value="1"></div></div><label for="wk-name">Ad (isteğe bağlı)</label><input id="wk-name" maxlength="50" placeholder="Yerinde müşteri" autocomplete="off"><label class="check-inline"><input type="checkbox" id="wk-excl"><span>Seansı bu gruba kapat (başka kimse katılamaz)</span></label><label class="check-inline"><input type="checkbox" id="wk-paid" checked><span>Tutar POS'ta tahsil edildi</span></label><p class="error" id="wk-error" role="alert"></p><button class="btn primary full" type="submit">Satışı ekle</button></form></section>
 <section class="form-card"><h2>Seansı kapat</h2><p class="muted">Özel etkinlik veya bakım için saati kapat. Müşteriler bu saati “kapalı” görür.</p><form id="block-form"><label for="bk-time">Seans</label><select id="bk-time"></select><label for="bk-reason">Neden</label><select id="bk-reason"><option>Özel etkinlik</option><option>Bakım</option><option>Diğer</option></select><p class="error" id="bk-error" role="alert"></p><button class="btn secondary full" type="submit">Seansı kapat</button></form><div id="block-list"></div></section>
 </div>
 <div class="list-heading"><h2>Rezervasyon akışı</h2><input id="search" placeholder="İsim veya bilet ara" aria-label="Rezervasyon ara"></div><div class="table-wrap"><table><thead><tr><th>Grup / bilet</th><th>Seans</th><th>Kişi</th><th>Toplam</th><th>Ön ödeme</th><th>Kalan</th><th>Kalan tahsil</th><th>Durum</th></tr></thead><tbody id="admin-rows"></tbody></table></div>
@@ -195,7 +195,7 @@ function seed(day){if(!DEMO||data.seeded.includes(day))return;
 function session(day,time,exclude){
   const rows=data.bookings.filter(b=>b.date===day&&b.time===time&&b.id!==exclude&&isActive(b)),i=idx(time);
   const carried=i>0&&data.bookings.some(b=>b.date===day&&b.time===TIMES[i-1]&&b.id!==exclude&&isActive(b)&&b.dur===40);
-  return {rows,count:sum(rows,'people'),dur:rows[0]?rows[0].dur:null,block:data.blocks.find(x=>x.date===day&&x.time===time),carried}
+  return {rows,count:sum(rows,'people'),dur:rows[0]?rows[0].dur:null,block:data.blocks.find(x=>x.date===day&&x.time===time),carried,excl:rows.some(b=>b.excl)}
 }
 // Uygunsa '' döner, değilse nedenini yazar. who: 'online' (müşteri), 'walkin' (kapıdan satış), 'admin' (zaman kuralı yok).
 function check(day,time,n,d,exclude,who='online'){
@@ -204,6 +204,7 @@ function check(day,time,n,d,exclude,who='online'){
   const s=session(day,time,exclude);
   if(s.block)return 'Kapalı';
   if(s.carried)return 'Önceki seans sürüyor';
+  if(s.excl)return 'Seans bir gruba kapalı';
   if(s.count>0){if(s.dur!==d)return s.dur+' dk seans';if(s.count>=CAPACITY)return 'Seans dolu';if(s.count+n>CAPACITY)return 'Yetersiz yer';return ''}
   if(d===40){const nx=TIMES[idx(time)+1];if(!nx)return '40 dk için uygun değil';const t=session(day,nx,exclude);if(t.block||t.count>0)return '40 dk için uygun değil'}
   return ''
@@ -225,11 +226,12 @@ function render(){
   if(selected&&!fits(date,selected,people,dur))selected=null;
   $('#date').value=date;$('#people').value=people;$('#minus').disabled=people<=1;$('#plus').disabled=people>=CAPACITY;
   $$('.mode').forEach(b=>{const on=Number(b.dataset.dur)===dur;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on))});
-  const filtered=TIMES.filter(t=>!$('#only-match').checked||session(date,t).count>0);
+  // Süresi dolan seanslar listeden kalkar; yalnızca şu anki ve bir önceki seans görünür.
+  const filtered=TIMES.filter(t=>start(date,t)>Date.now()-60*60000&&(!$('#only-match').checked||session(date,t).count>0));
   $('#slot-list').innerHTML=filtered.map(time=>{
-    const s=session(date,time),why=check(date,time,people,dur),ok=why==='',chosen=selected===time,closed=!!s.block,off=closed||s.carried,d=s.dur||dur;
+    const s=session(date,time),why=check(date,time,people,dur),ok=why==='',chosen=selected===time,closed=!!s.block,off=closed||s.carried||s.excl,d=s.dur||dur;
     const status=ok?(s.count?`${CAPACITY-s.count} yer kaldı`:'Müsait'):why;
-    const title=closed?`Kapalı · ${esc(s.block.reason)}`:s.carried?'Önceki 40 dk seans sürüyor':s.count?`${s.count} oyuncu kayıtlı`:'İlk grubu sen oluştur';
+    const title=closed?`Kapalı · ${esc(s.block.reason)}`:s.carried?'Önceki 40 dk seans sürüyor':s.excl?'Seans bir gruba ayrıldı':s.count?`${s.count} oyuncu kayıtlı`:'İlk grubu sen oluştur';
     const badge=s.count>0&&s.count<CAPACITY&&!off?'<span class="badge">Açık</span>':'';
     const seats=off?'':`<div class="seats" aria-hidden="true">${Array.from({length:CAPACITY},(_,i)=>`<i class="seat ${i<s.count?'filled':chosen&&i<s.count+people?'yours':''}"></i>`).join('')}</div>`;
     const profiles=off?'':s.rows.filter(b=>b.share).map(b=>`<small class="profile-label">${esc(b.ageGroup)} · ${esc(b.level)}</small>`).join('');
@@ -334,7 +336,7 @@ function renderAdmin(){
   const rem=data.bookings.filter(b=>b.date===d&&b.status==='confirmed'&&b.source==='online').sort((a,b)=>a.time.localeCompare(b.time));
   $('#rem-note').textContent='Seansa 3 saat kala: “Seansınıza 3 saat kaldı, lütfen 15 dk erken gelin.”'+(DEMO?' Demo sürümde mesaj gönderilmez.':'');
   $('#reminders').innerHTML=rem.map(b=>`<tr><td>${esc(b.name)}</td><td>${esc(b.phone||'—')}</td><td>${new Date(start(b.date,b.time)-3*3600000).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Istanbul'})}</td><td>${DEMO?'Demo: gönderilmez':'Planlandı'}</td></tr>`).join('')||'<tr><td colspan="4">Hatırlatma yok.</td></tr>';
-  $('#admin-rows').innerHTML=rows.map(b=>{const open=isActive(b)&&b.status!=='pending';return `<tr><td>${esc(b.name)}<small>${b.id.startsWith('ORNEK')?'Örnek kayıt':b.id}${b.phone?' · '+esc(b.phone):''}${b.source==='walkin'?' · Yerinde':''}${b.reason?' · '+esc(b.reason):''}</small></td><td>${b.time}<small>${b.dur} dk · Açık</small></td><td>${b.people}</td><td>${money(b.total)}</td><td>${money(b.deposit)}</td><td>${money(b.total-b.deposit)}</td><td><input type="checkbox" data-bal="${b.id}" ${b.balancePaid?'checked':''} ${open?'':'disabled'} aria-label="${esc(b.name)} kalan tutar tahsil edildi"></td><td><select data-status="${b.id}" aria-label="${esc(b.name)} durumu">${Object.entries(labels).filter(([v])=>v!=='pending'||b.status==='pending').map(([v,l])=>`<option value="${v}" ${b.status===v?'selected':''}>${l}</option>`).join('')}</select></td></tr>`}).join('')||'<tr><td colspan="8">Eşleşen rezervasyon yok.</td></tr>';
+  $('#admin-rows').innerHTML=rows.map(b=>{const open=isActive(b)&&b.status!=='pending';return `<tr><td>${esc(b.name)}<small>${b.id.startsWith('ORNEK')?'Örnek kayıt':b.id}${b.phone?' · '+esc(b.phone):''}${b.source==='walkin'?' · Yerinde':''}${b.reason?' · '+esc(b.reason):''}</small></td><td>${b.time}<small>${b.dur} dk · ${b.excl?'Kapalı grup':'Açık'}</small></td><td>${b.people}</td><td>${money(b.total)}</td><td>${money(b.deposit)}</td><td>${money(b.total-b.deposit)}</td><td><input type="checkbox" data-bal="${b.id}" ${b.balancePaid?'checked':''} ${open?'':'disabled'} aria-label="${esc(b.name)} kalan tutar tahsil edildi"></td><td><select data-status="${b.id}" aria-label="${esc(b.name)} durumu">${Object.entries(labels).filter(([v])=>v!=='pending'||b.status==='pending').map(([v,l])=>`<option value="${v}" ${b.status===v?'selected':''}>${l}</option>`).join('')}</select></td></tr>`}).join('')||'<tr><td colspan="8">Eşleşen rezervasyon yok.</td></tr>';
   renderAdminForms(d);
 }
 function renderAdminForms(d){
@@ -397,10 +399,13 @@ $('#admin-rows').onchange=e=>{
 };
 $('#walkin-form').onsubmit=e=>{e.preventDefault();
   const d=$('#admin-date').value||date,t=$('#wk-time').value,n=Math.trunc(Number($('#wk-people').value)),du=Number($('#wk-dur').value),err=$('#wk-error');
-  const why=t?check(d,t,n,du,null,'walkin'):'Uygun seans yok.';if(why){err.textContent=why;return}
+  const excl=$('#wk-excl').checked;
+  let why=t?check(d,t,n,du,null,'walkin'):'Uygun seans yok.';
+  if(!why&&excl&&session(d,t).count>0)why='Kapatmak için seansta başka oyuncu olmamalı.';
+  if(why){err.textContent=why;return}
   err.textContent='';const total=n*PRICES[du];
-  data.bookings.push({id:newId('W'),date:d,time:t,people:n,dur:du,name:$('#wk-name').value.trim()||'Yerinde müşteri',phone:'',total,deposit:0,status:'arrived',paid:false,balancePaid:$('#wk-paid').checked,source:'walkin',mine:false,createdAt:Date.now()});
-  persist();$('#wk-name').value='';render();renderAdmin();toast('Yerinde satış eklendi.')};
+  data.bookings.push({id:newId('W'),date:d,time:t,people:n,dur:du,name:$('#wk-name').value.trim()||'Yerinde müşteri',phone:'',total,deposit:0,status:'arrived',paid:false,balancePaid:$('#wk-paid').checked,source:'walkin',excl,mine:false,createdAt:Date.now()});
+  persist();$('#wk-name').value='';$('#wk-excl').checked=false;render();renderAdmin();toast('Yerinde satış eklendi.')};
 $('#block-form').onsubmit=e=>{e.preventDefault();
   const d=$('#admin-date').value||date,t=$('#bk-time').value,err=$('#bk-error');if(!t){err.textContent='Kapatılabilir seans yok.';return}
   const s=session(d,t);if(s.count>0||s.carried||s.block){err.textContent='Bu seansta rezervasyon var. Önce iptal et veya taşı.';return}
