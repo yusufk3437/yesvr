@@ -124,7 +124,7 @@ td input[type=checkbox]{vertical-align:middle}
 <details><summary>Açık seans nedir? Seans dolmazsa ne olur?</summary><p>Açık seansta toplam 10 kişilik kapasiteye kadar başka gruplar da katılabilir. Başka grupların katılıp katılmayacağı garanti edilemez. Kimse katılmazsa seans yine oynanır ve eksik oyuncu yerine çalışanlarımız rakip olarak oyuna girer. Bu nedenle ön ödeme iade edilmez.</p></details>
 <details><summary>Bazı saatler neden kapalı?</summary><p>Özel etkinlik veya bakım için işletme bazı saatleri kapatır. Özel etkinlik düzenlemek istersen bizi arayabilirsin: <a href="tel:+905469788003" style="text-decoration:underline">0546 978 80 03</a>.</p></details>
 <details><summary>Rezervasyonumu değiştirebilir miyim?</summary><p>Seans başlangıcına en az 6 saat varsa, müsait bir seansa ücretsiz taşıyabilirsin. İptal edersen ön ödeme iade edilmez. Ayrıntılar için <a href="#" data-legal="iade" style="text-decoration:underline">iptal ve iade koşullarına</a> bak.</p></details>
-<details><summary>Son dakika rezervasyon yapabilir miyim?</summary><p>Online satış seansa 1 saat kala kapanır. Daha geç saatler için bizi arayabilir veya mekânda yer sorabilirsin.</p></details>
+<details><summary>Son dakika rezervasyon yapabilir miyim?</summary><p>Seans başlayana kadar yer varsa online rezervasyon yapabilirsin. Seans dolduysa veya başladıysa bizi arayabilir ya da mekânda yer sorabilirsin.</p></details>
 <details><summary>Sağlık ve yaş koşulları var mı?</summary><p>Epilepsi, ağır baş dönmesi gibi durumlar veya yaş sınırı için rezervasyondan önce bizi ara. Genel uyarılar: <a href="#" data-legal="saglik" style="text-decoration:underline">sağlık ve güvenlik</a>.</p></details>
 <details data-demo><summary>Bu site üzerinden gerçek rezervasyon yapabilir miyim?</summary><p>Henüz hayır. Bu sürüm sunum ve deneme içindir. Örnek doluluklar ve oluşturduğun kayıtlar yalnızca bu tarayıcıda saklanır. Gerçek ödeme, SMS ve WhatsApp gönderimi yapılmaz.</p></details></section></div>
 <section class="wrap secondary-view" id="view-mine" hidden><div class="section-title"><div><h1>Rezervasyonlarım</h1><p id="mine-sub"></p></div><button class="btn primary" data-view="book">Yeni rezervasyon</button></div>
@@ -155,7 +155,7 @@ const DEMO=true;
 const ADMIN_PIN='2468';                 // Yalnızca demo girişi. Canlıda sunucu tarafı giriş (e-posta + şifre) kullanılmalı.
 const COMPANY='[İşletme ticari unvanı]'; // Yasal metinlerde görünür; canlıya çıkmadan önce doldur.
 const PRICES={20:350,40:500};           // kişi başı, KDV dahil
-const DEPOSIT_RATE=.1, CAPACITY=10, CUTOFF_MIN=60, CHANGE_HOURS=6, HOLD_MIN=15;
+const DEPOSIT_RATE=.1, CAPACITY=10, CUTOFF_MIN=0, CHANGE_HOURS=6, HOLD_MIN=15;
 // Listede bir önceki saatin seansları dahil görünür (16:00'da 15:00'dan itibaren); daha eskileri gizlenir.
 const visibleFrom=()=>Math.floor(Date.now()/3600000)*3600000-3600000;
 
@@ -197,7 +197,7 @@ function seed(day){if(!DEMO||data.seeded.includes(day))return;
 function session(day,time,exclude){
   const rows=data.bookings.filter(b=>b.date===day&&b.time===time&&b.id!==exclude&&isActive(b)),i=idx(time);
   const carried=i>0&&data.bookings.some(b=>b.date===day&&b.time===TIMES[i-1]&&b.id!==exclude&&isActive(b)&&b.dur===40);
-  return {rows,count:sum(rows,'people'),dur:rows[0]?rows[0].dur:null,block:data.blocks.find(x=>x.date===day&&x.time===time),carried,excl:rows.some(b=>b.excl)}
+  return {rows,count:sum(rows,'people'),dur:rows.length?Math.max(...rows.map(b=>b.dur)):null,block:data.blocks.find(x=>x.date===day&&x.time===time),carried,excl:rows.some(b=>b.excl)}
 }
 // Uygunsa '' döner, değilse nedenini yazar. who: 'online' (müşteri), 'walkin' (kapıdan satış), 'admin' (zaman kuralı yok).
 function check(day,time,n,d,exclude,who='online'){
@@ -207,7 +207,7 @@ function check(day,time,n,d,exclude,who='online'){
   if(s.block)return 'Kapalı';
   if(s.carried)return 'Önceki seans sürüyor';
   if(s.excl)return 'Seans bir gruba kapalı';
-  if(s.count>0){if(s.dur!==d)return s.dur+' dk seans';if(s.count>=CAPACITY)return 'Seans dolu';if(s.count+n>CAPACITY)return 'Yetersiz yer';return ''}
+  if(s.count>0){if(d===40&&s.dur===20)return '20 dk seans'; // 20 dk'lık oyuncu 40 dk'lık seansa katılabilir, tersi olmaz.if(s.count>=CAPACITY)return 'Seans dolu';if(s.count+n>CAPACITY)return 'Yetersiz yer';return ''}
   if(d===40){const nx=TIMES[idx(time)+1];if(!nx)return '40 dk için uygun değil';const t=session(day,nx,exclude);if(t.block||t.count>0)return '40 dk için uygun değil'}
   return ''
 }
