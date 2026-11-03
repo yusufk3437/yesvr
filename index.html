@@ -163,7 +163,7 @@ const DEMO=true;
 const ADMIN_PIN='2468';                 // Yalnızca demo girişi. Canlıda sunucu tarafı giriş (e-posta + şifre) kullanılmalı.
 const COMPANY='[İşletme ticari unvanı]'; // Yasal metinlerde görünür; canlıya çıkmadan önce doldur.
 const PRICES={20:350,40:500};           // kişi başı, KDV dahil
-const PRIVATE_FEE=500;                  // seansı yalnızca kendi grubuna kapatma ücreti (TL, KDV dahil) — işletme belirleyecek
+const privFee=()=>Math.round((CAPACITY-people)*PRICES[dur]/10); // seansı gruba kapatma ücreti: boş kalan yer × kişi başı ücret ÷ 10 (müşteriye yalnızca tutar gösterilir)
 let priv=false;
 const DEPOSIT_RATE=.1, CAPACITY=10, CUTOFF_MIN=0, CHANGE_HOURS=6, HOLD_MIN=15;
 // Listede bir önceki saatin seansları dahil görünür (16:00'da 15:00'dan itibaren); daha eskileri gizlenir.
@@ -252,9 +252,9 @@ function render(){
   }).join('')||'<div class="empty">Bu filtrede seans yok. “Sadece oyuncusu olanlar” filtresini kapatabilirsin.</div>';
   const canPriv=!!selected&&session(date,selected).count===0;if(!canPriv)priv=false;
   $('#priv-box').hidden=!canPriv;$$('[data-priv]').forEach(b=>b.classList.toggle('on',(b.dataset.priv==='1')===priv));
-  $('#priv-note').textContent=priv?`Seans yalnızca grubuna ayrılır, başkası katılamaz. +${money(PRIVATE_FEE)}`:'Başka gruplar katılabilir. Ek ücret yok.';
-  $('#sum-priv-row').hidden=!priv;$('#sum-priv').textContent=money(PRIVATE_FEE);
-  const unit=PRICES[dur],total=unit*people+(priv?PRIVATE_FEE:0),dep=deposit(total);
+  $('#priv-note').textContent=priv?`Seans yalnızca grubuna ayrılır, başkası katılamaz. +${money(privFee())}`:'Başka gruplar katılabilir. Ek ücret yok.';
+  $('#sum-priv-row').hidden=!priv;$('#sum-priv').textContent=money(privFee());
+  const unit=PRICES[dur],total=unit*people+(priv?privFee():0),dep=deposit(total);
   $('#sum-time').textContent=selected||'Seansını seç';$('#sum-date').textContent=pretty(date);$('#sum-dur').textContent=dur+' dakika';$('#sum-people').textContent=people+' kişi';$('#sum-unit').textContent=money(unit);$('#sum-total').textContent=money(total);$('#sum-deposit').textContent=money(dep);$('#sum-balance').textContent=money(total-dep);
   $('#continue').disabled=!selected;$('#mobile-book').hidden=!selected||$('#view-book').hidden;$('#mobile-cost').textContent=money(dep);$('#mobile-time').textContent=(selected||'')+' · '+people+' kişi · '+dur+' dk · %10 ön ödeme';
   $('#under-note').textContent=dur+' dk oyun + 10 dk anlatım ve temizlik';
@@ -274,7 +274,7 @@ function showLegal(key){const L=LEGAL[key];if(!L)return;$('#legal-content').inne
 function checkout(){
   if(!selected||!fits(date,selected,people,dur))return render();
   if(priv&&session(date,selected).count>0){priv=false;return render()}
-  const total=people*PRICES[dur]+(priv?PRIVATE_FEE:0),dep=deposit(total);
+  const total=people*PRICES[dur]+(priv?privFee():0),dep=deposit(total);
   $('#checkout-content').innerHTML=`<h2>Yerini ayır.</h2><p>${pretty(date)} · ${selected}<br>${people} kişi · ${dur} dk · ${priv?'Özel seans (katılıma kapalı)':'Açık seans'}</p><form id="booking-form"><label for="guest">Ad soyad</label><input id="guest" required minlength="2" maxlength="50" autocomplete="name"><label for="phone">Telefon</label><input id="phone" type="tel" inputmode="tel" required maxlength="20" autocomplete="tel" placeholder="05xx xxx xx xx"><p style="margin-top:8px">Onay ve hatırlatma mesajı bu numaraya gönderilir.</p><label for="group-level">Oyun deneyimi</label><select id="group-level"><option>Yeni başlayanlar</option><option>Deneyimli oyuncular</option><option>Karma deneyim</option></select><label for="group-age">Grup kategorisi</label><select id="group-age"><option>Belirtilmedi</option><option>Yetişkin grubu (18+)</option><option>Aile grubu</option></select><label class="check-inline"><input id="profile-share" type="checkbox"><span>Grup kategorisi ve deneyim seviyem açık lobide gösterilsin. İsimler paylaşılmaz.</span></label><div class="checkout-breakdown"><div><span>Toplam tutar (KDV dahil)</span><b>${money(total)}</b></div><div><span>Ön ödeme (%10)</span><b>${money(dep)}</b></div><div><span>Mekânda kalan</span><b>${money(total-dep)}</b></div></div><div class="checks"><label class="check-inline"><input id="terms" type="checkbox" required><span>Ön ödemenin iade edilmediğini; <a href="#" data-legal="iade">iptal ve iade koşullarını</a> ve <a href="#" data-legal="satis">mesafeli satış bilgilendirmesini</a> okuduğumu kabul ediyorum.</span></label><label class="check-inline"><input id="kvkk" type="checkbox" required><span><a href="#" data-legal="kvkk">Gizlilik ve KVKK aydınlatma metnini</a> okudum.</span></label><label class="check-inline"><input id="health" type="checkbox" required><span>Katılacak herkesin <a href="#" data-legal="saglik">sağlık ve güvenlik uyarılarını</a> okuduğunu onaylıyorum.</span></label></div>${DEMO?'<p style="margin-top:14px">Demo: gerçek ödeme alınmaz.</p>':''}<p class="error" id="form-error" role="alert"></p><button class="btn primary full" type="submit">Ön ödemeye geç →</button></form>`;
   $('#checkout').showModal();
   $('#booking-form').onsubmit=e=>{e.preventDefault();const err=m=>{$('#form-error').textContent=m};
