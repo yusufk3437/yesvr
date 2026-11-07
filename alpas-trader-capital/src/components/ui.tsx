@@ -184,7 +184,7 @@ export function Segmented<T extends string>({ value, onChange, options, label, c
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
           className={cx(
-            "h-8 rounded-[9px] px-3 text-[0.84rem] font-medium transition-colors",
+            "min-h-8 rounded-[9px] px-3 py-1 text-[0.84rem] font-medium leading-tight transition-colors",
             value === o.value ? "bg-card text-ink shadow-sm" : "text-muted hover:text-ink",
           )}
         >

@@ -24,7 +24,7 @@ export type Op =
   | { k: "qr"; x: number; y: number; size: number; modules: boolean[][]; color: string };
 
 const THEMES = {
-  challenge_passed: { band: "#0f2240", accent: "#8e6c35", accentSoft: "#d8bf8f", reach: 2 },
+  challenge_passed: { band: "#243264", accent: "#8e6c35", accentSoft: "#d8bf8f", reach: 2 },
   funded_trader: { band: "#1d2531", accent: "#2a7f66", accentSoft: "#8fd0bb", reach: 3 },
   payout: { band: "#12302a", accent: "#8a6a2c", accentSoft: "#e2c88f", reach: 4 },
 } as const;

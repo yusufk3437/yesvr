@@ -54,10 +54,11 @@ function check(cond, label) {
   try {
     // 0. "What is your budget?" custom-size planner (no purchase).
     await go("/challenges#budget");
-    await page.getByLabel("Simulated account size (USD)").fill("35000");
     await page.getByText("$241").first().waitFor();
     check(true, "budget planner: custom Ascent 35K priced at $241 (curve + 8%)");
-    await page.getByLabel("Simulated account size (USD)").fill("95000");
+    await page.getByRole("button", { name: /Type an account size/ }).click();
+    await page.getByLabel("Type an account size").fill("95000");
+    await page.getByLabel("Type an account size").press("Enter");
     await page.getByRole("button", { name: /Choose standard 100K instead/ }).waitFor();
     check(true, "budget planner suggests the cheaper standard 100K for a 95K request");
 

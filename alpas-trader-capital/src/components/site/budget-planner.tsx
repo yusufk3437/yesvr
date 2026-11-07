@@ -21,7 +21,10 @@ export function BudgetPlanner() {
   const b = m.site.budget;
   const [programId, setProgramId] = useState<ProgramId>("ascent");
   const [mode, setMode] = useState<"size" | "fee">("size");
-  const [sizeInput, setSizeInput] = useState("35000");
+  const [size, setSize] = useState(3_500_000);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState("");
+  const [snapped, setSnapped] = useState(false);
   const [feeInput, setFeeInput] = useState("250");
   const program = programs.find((p) => p.id === programId)!;
   const c = program.customSizing;
@@ -30,8 +33,19 @@ export function BudgetPlanner() {
   const parse = (v: string) => Math.round(Number(v.replace(/[^\d.]/g, "")) * 100);
   let quote: SizeQuote | null = null;
   let error: string | null = null;
+  const clampSize = (v: number) => Math.min(c.maxSize, Math.max(c.minSize, Math.round(v / c.step) * c.step));
+  const current_ = clampSize(size);
+  const commitDraft = () => {
+    const v = parse(draft);
+    if (v > 0) {
+      const next = clampSize(v);
+      setSnapped(next !== v);
+      setSize(next);
+    }
+    setEditing(false);
+  };
   if (mode === "size") {
-    const q = quoteSize(program, parse(sizeInput));
+    const q = quoteSize(program, current_);
     if ("error" in q) error = m.errors[q.error];
     else quote = q;
   } else {
@@ -58,14 +72,15 @@ export function BudgetPlanner() {
           </h2>
           <p className="mt-4 text-[1.02rem] leading-relaxed text-muted">{b.intro}</p>
           <div className="mt-6 space-y-4">
-            <Segmented value={programId} onChange={setProgramId} label={m.site.selector.program} options={programs.map((p) => ({ value: p.id, label: `${l(p.name)} · ${l(p.model)}` }))} />
+            <div>
+              <Segmented value={programId} onChange={setProgramId} label={m.site.selector.program} options={programs.map((p) => ({ value: p.id, label: l(p.name) }))} />
+              <p className="mt-1 text-xs text-muted">{l(program.model)}</p>
+            </div>
             <div>
               <Segmented value={mode} onChange={setMode} label={b.eyebrow} options={[{ value: "size", label: b.modeSize }, { value: "fee", label: b.modeFee }]} />
             </div>
             {mode === "size" ? (
-              <Field label={b.sizeLabel} htmlFor="bp-size" hint={t(b.sizeHint, { min: f.money(c.minSize, { decimals: 0 }), max: f.money(c.maxSize, { decimals: 0 }), step: f.money(c.step, { decimals: 0 }) })} error={error}>
-                <Input id="bp-size" inputMode="numeric" value={sizeInput} onChange={(e) => setSizeInput(e.target.value)} aria-invalid={!!error} className="num h-12 text-lg" />
-              </Field>
+              <p className="text-sm text-muted">{t(b.sizeHint, { min: f.money(c.minSize, { decimals: 0 }), max: f.money(c.maxSize, { decimals: 0 }), step: f.money(c.step, { decimals: 0 }) })}</p>
             ) : (
               <Field label={b.feeLabel} htmlFor="bp-fee" hint={b.feeHint} error={error}>
                 <Input id="bp-fee" inputMode="numeric" value={feeInput} onChange={(e) => setFeeInput(e.target.value)} aria-invalid={!!error} className="num h-12 text-lg" />
@@ -87,10 +102,63 @@ export function BudgetPlanner() {
           ) : (
             <div className="space-y-5 p-5">
               <dl className="grid grid-cols-2 gap-4">
-                <div>
+                <div className="col-span-2">
                   <dt className="text-xs uppercase tracking-[0.08em] text-muted">{m.site.challenges.termsSize}</dt>
-                  <dd className="num mt-1 font-display text-2xl font-bold">{f.money(quote.size, { decimals: 0 })}</dd>
-                  <dd className="mt-0.5 text-xs text-muted">{m.site.selector.sizeNote}</dd>
+                  <dd className="mt-1">
+                    {mode === "size" && editing ? (
+                      <Input
+                        autoFocus
+                        aria-label={b.editSize}
+                        inputMode="numeric"
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        onBlur={commitDraft}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") commitDraft();
+                          if (e.key === "Escape") setEditing(false);
+                        }}
+                        className="num h-12 max-w-[14rem] font-display text-2xl font-bold"
+                      />
+                    ) : mode === "size" ? (
+                      <button
+                        type="button"
+                        aria-label={`${b.editSize}: ${f.money(quote.size, { decimals: 0 })}`}
+                        onClick={() => {
+                          setDraft(String(quote!.size / 100));
+                          setEditing(true);
+                        }}
+                        className="num rounded-md font-display text-3xl font-bold underline decoration-brass decoration-dashed decoration-2 underline-offset-[6px] hover:text-navy-700"
+                      >
+                        {f.money(quote.size, { decimals: 0 })}
+                      </button>
+                    ) : (
+                      <span className="num font-display text-3xl font-bold">{f.money(quote.size, { decimals: 0 })}</span>
+                    )}
+                  </dd>
+                  {mode === "size" && (
+                    <dd className="mt-3">
+                      <input
+                        type="range"
+                        min={c.minSize}
+                        max={c.maxSize}
+                        step={c.step}
+                        value={current_}
+                        onChange={(e) => {
+                          setSize(Number(e.target.value));
+                          setSnapped(false);
+                        }}
+                        aria-label={m.site.challenges.termsSize}
+                        aria-valuetext={f.money(current_, { decimals: 0 })}
+                        className="h-8 w-full cursor-pointer accent-[var(--color-brass)]"
+                      />
+                      <div className="num flex justify-between text-xs text-muted">
+                        <span>{formatSize(c.minSize)}</span>
+                        <span>{formatSize(c.maxSize)}</span>
+                      </div>
+                      <p className="mt-1 text-xs text-muted">{snapped ? t(b.snapped, { step: f.money(c.step, { decimals: 0 }) }) : b.slideHint}</p>
+                    </dd>
+                  )}
+                  <dd className="mt-1 text-xs text-muted">{m.site.selector.sizeNote}</dd>
                 </div>
                 <div>
                   <dt className="text-xs uppercase tracking-[0.08em] text-muted">{b.fee}</dt>

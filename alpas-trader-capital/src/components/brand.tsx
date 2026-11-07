@@ -2,8 +2,8 @@ import { contourPaths, MONOGRAM, openSpline, routeGeometry } from "@/lib/topo";
 import { cx } from "./ui";
 
 export function Monogram({ className, tone = "dark", title = "ALPAS Trader Capital" }: { className?: string; tone?: "dark" | "light"; title?: string }) {
-  const seal = tone === "dark" ? "var(--color-navy-900)" : "var(--color-paper)";
-  const summit = tone === "dark" ? "var(--color-paper)" : "var(--color-navy-900)";
+  const seal = tone === "dark" ? "var(--color-logo)" : "var(--color-paper)";
+  const summit = tone === "dark" ? "var(--color-paper)" : "var(--color-logo)";
   const metal = tone === "dark" ? "var(--color-brass)" : "var(--color-brass-700)";
   return (
     <svg viewBox="0 0 64 64" className={cx("shrink-0", className)} role={title ? "img" : undefined} aria-label={title || undefined} aria-hidden={title ? undefined : true}>

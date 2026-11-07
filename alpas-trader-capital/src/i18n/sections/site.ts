@@ -152,6 +152,9 @@ export const site = section({
       max: "Maximum loss",
       cta: "Continue with {program} {size}",
       teaser: "Need a size between our plans? What is your budget?",
+      slideHint: "Slide to choose, or tap the amount to type it.",
+      editSize: "Type an account size",
+      snapped: "Rounded to the nearest {step} step within the allowed range.",
     },
     challenges: {
       eyebrow: "Challenges",
@@ -466,6 +469,9 @@ export const site = section({
       max: "Maksimum zarar",
       cta: "{program} {size} ile devam et",
       teaser: "Planlarımızın arasında bir büyüklük mü lazım? What is your budget?",
+      slideHint: "Kaydırarak seçin ya da tutara dokunup elle yazın.",
+      editSize: "Hesap büyüklüğünü yazın",
+      snapped: "İzin verilen aralıkta en yakın {step} adımına yuvarlandı.",
     },
     challenges: {
       eyebrow: "Challenge'lar",

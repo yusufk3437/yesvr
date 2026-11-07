@@ -1,7 +1,7 @@
 # Rakip karşılaştırması (kısa)
 
 **Erişim tarihi:** 2026-11-07
-**Yöntem ve sınırlama:** Bu oturumun ağ politikası `ftmo.com`, `fundingpips.com` ve `fundedtradermarkets.com` alan adlarına doğrudan erişimi engelledi (DNS çözümlemesi reddedildi). Bilgiler, yalnızca bu resmî alan adlarıyla sınırlandırılmış web aramasının döndürdüğü sayfa özetlerinden derlendi. Sayfaların kendisi açılıp satır satır okunamadı. Bu yüzden her rakam **"doğrulanmadı — canlı sayfada kontrol edilmeli"** statüsündedir. Rakam bulunamayan alanlar boş bırakıldı ve hiçbir değer uydurulmadı. Pazarlama başlıkları (ör. "up to 90%") ayrıntılı kural yerine kullanılmadı.
+**Yöntem ve sınırlama (ilk tur):** Bu oturumun ağ politikası `ftmo.com`, `fundingpips.com` ve `fundedtradermarkets.com` alan adlarına doğrudan erişimi engelledi (DNS çözümlemesi reddedildi). Bilgiler, yalnızca bu resmî alan adlarıyla sınırlandırılmış web aramasının döndürdüğü sayfa özetlerinden derlendi. Sayfaların kendisi açılıp satır satır okunamadı. Bu yüzden her rakam **"doğrulanmadı — canlı sayfada kontrol edilmeli"** statüsündedir. Rakam bulunamayan alanlar boş bırakıldı ve hiçbir değer uydurulmadı. Pazarlama başlıkları (ör. "up to 90%") ayrıntılı kural yerine kullanılmadı.
 
 ## 1. Kaynaklar
 
@@ -64,5 +64,18 @@
 1. Pazar iki ana modelde toplanıyor: iki aşamalı (%8–10 → %5, günlük %5, toplam %10) ve tek aşamalı (daha sıkı limitler, trailing toplam zarar ve consistency). Instant modeller ayrı ve daha kısıtlı ürünler olarak sunuluyor.
 2. Rakiplerde en çok kafa karıştıran üç konu var: kural sürümleri, günlük reset dayanağı ve consistency formülü. ALPAS bunların her birini tek bir merkezî tanımla, sürüm numarasıyla ve örnek hesapla gösterecek.
 3. Kampanyalı fiyatlarda kalıcı "üstü çizili" fiyat yaygın. ALPAS liste fiyatını sabit tutacak. Kampanyalar yalnızca açık kod, geçerlilik tarihi ve indirim tutarıyla gösterilecek.
+
+## 5. Doğrudan doğrulama (2026-11-07, ağ izni verildikten sonra)
+
+Ağ izni sonrasında resmî sayfalar doğrudan okundu (kimliğini belirten düz HTTP isteğiyle, tarayıcı taklidi yapılmadan).
+
+| Kaynak | Doğrulanan bilgi |
+|---|---|
+| FTMO — https://ftmo.com/en/trading-objectives/ | Equity = bakiye + açık pozisyon P/L ± swap − komisyon. **Maximum Loss: end-of-day trailing** (sayfa artık bunu söylüyor; §3'teki "static" çelişkisi bu sayfa için çözüldü). Minimum 4 işlem günü; işlem günü 00:00–23:59:59 CE(S)T arasında en az bir pozisyon açılan gün. **Consistency, Best Day kuralının yerine 12 Ekim 2026 ve sonrası siparişlerde geçerli** (arama özetindeki "5 Ekim" bilgisi hatalıydı). |
+| Funded Trader Markets — https://fundedtradermarkets.com/2-step | **2 Step Plus 100K: $998 üstü çizili → $399** (kampanyalı). Günlük DD %4 ($4.000). Toplam DD %10 ($10.000), bakiye bazlı. Hedef %8 → %5. Min. işlem günü: değerlendirmede 3, simüle funded'da 5. Funded'da consistency yok. Kâr payı %70. Ödül döngüsü: talep üzerine. |
+| Funded Trader Markets — https://fundedtradermarkets.com/1-step | **1 Step Nitro 100K: $622 üstü çizili → $249**. Günlük DD %4. Toplam DD %6, trailing lock. Hedef %10. Min. işlem günü funded'da 5. Consistency: değerlendirmede %50, funded'da %45. Kâr payı "up to 90%". Talep üzerine ödeme. |
+| FundingPips — fundingpips.com, help.fundingpips.com | **Erişilemedi:** site bot korumasıyla 403/429 döndürüyor. Koruma aşılmaya çalışılmadı. FundingPips satırları "doğrulanmadı" olarak kalır. |
+
+**ALPAS için not:** FTM'nin kalıcı "üstü çizili" fiyatları (ör. $998 → $399), ALPAS'ın kalıcı indirim göstermeme kararını destekliyor. Liste fiyatı gerçek fiyattır; kampanya yalnızca bitiş tarihli kodla uygulanır.
 
 Seçilen ürünler için bkz. [product-decisions.md](./product-decisions.md).
