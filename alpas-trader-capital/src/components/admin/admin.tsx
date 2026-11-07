@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ArrowLeft, ShieldAlert } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { formatSize } from "@/domain/money";
 import { PAYOUT_TRANSITIONS } from "@/domain/payout";
 import type { Payout, ProgramId } from "@/domain/types";
@@ -73,9 +73,7 @@ export function AdminPanel() {
       </header>
       <main id="main" className="mx-auto max-w-[1320px] px-4 py-6 sm:px-6">
         <Notice tone="warn" className="mb-5">
-          <span className="inline-flex items-center gap-1">
-            <ShieldAlert className="size-4" aria-hidden /> {a.demoWarning}
-          </span>
+          {a.demoWarning}
         </Notice>
         {!isOps ? (
           <Card className="mx-auto max-w-md p-8 text-center">
