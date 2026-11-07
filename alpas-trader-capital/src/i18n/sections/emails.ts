@@ -3,6 +3,7 @@ import { section } from "../define";
 export const emails = section({
   en: {
     from: "ALPAS Trader Capital <notifications@alpas.example>",
+    fromLabel: "From",
     to: "To",
     subject: "Subject",
     greeting: "Hello {name},",
@@ -27,6 +28,7 @@ export const emails = section({
   },
   tr: {
     from: "ALPAS Trader Capital <notifications@alpas.example>",
+    fromLabel: "Gönderen",
     to: "Alıcı",
     subject: "Konu",
     greeting: "Merhaba {name},",

@@ -72,12 +72,12 @@ export function RouteMap({ stops, className, animate = false, tone = "light", he
         return (
           <g key={i} transform={`translate(${p.x} ${p.y})`}>
             {s.state === "current" && <circle r="7" fill="none" stroke="var(--color-copper)" strokeWidth="2" className="pulse-ring" />}
-            <circle r={s.state === "next" ? 6 : 8} fill={s.state === "next" ? (tone === "light" ? "var(--color-petrol-900)" : "var(--color-card)") : "var(--color-copper)"} stroke={s.state === "next" ? faint : ink} strokeWidth="2.5" />
+            <circle r={compact ? (s.state === "next" ? 5 : 6.5) : s.state === "next" ? 6 : 8} fill={s.state === "next" ? (tone === "light" ? "var(--color-petrol-900)" : "var(--color-card)") : "var(--color-copper)"} stroke={s.state === "next" ? faint : ink} strokeWidth="2.5" />
             <text
-              y={above ? -22 : 30}
+              y={above ? (compact ? -16 : -22) : compact ? 26 : 30}
               textAnchor={i === 0 ? "start" : i === points.length - 1 ? "end" : "middle"}
               className="font-display"
-              fontSize={compact ? 26 : 22}
+              fontSize={compact ? 17 : 22}
               fontWeight={700}
               fill={s.state === "next" ? faint : ink}
               letterSpacing="0.04em"

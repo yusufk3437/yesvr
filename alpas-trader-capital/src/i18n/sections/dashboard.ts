@@ -240,6 +240,9 @@ export const dash = section({
       receiptNote: "Demo document. No funds were transferred.",
       reason: "Reason: {reason}",
       accountLabel: "Funded account",
+      fillMax: "Max",
+      fillMin: "Min",
+      actor: { trader: "you", ops: "operations", system: "system" },
     },
     certificates: {
       title: "Certificates",
@@ -654,6 +657,9 @@ export const dash = section({
       receiptNote: "Demo belge. Hiçbir para transfer edilmedi.",
       reason: "Gerekçe: {reason}",
       accountLabel: "Funded hesap",
+      fillMax: "Azami",
+      fillMin: "Asgari",
+      actor: { trader: "siz", ops: "operasyon", system: "sistem" },
     },
     certificates: {
       title: "Sertifikalar",

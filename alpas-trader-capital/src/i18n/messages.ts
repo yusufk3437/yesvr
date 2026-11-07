@@ -7,6 +7,7 @@ import { assistant } from "./sections/assistant";
 import { admin } from "./sections/admin";
 import { emails } from "./sections/emails";
 import { legal } from "./sections/legal";
+import { certs } from "./sections/certs";
 
 const pick = <K extends "en" | "tr">(k: K) => ({
   common: common[k],
@@ -23,6 +24,7 @@ const pick = <K extends "en" | "tr">(k: K) => ({
   admin: admin[k],
   emails: emails[k],
   legal: legal[k],
+  certs: certs[k],
 });
 
 export const messages = { en: pick("en"), tr: pick("tr") };

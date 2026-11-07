@@ -283,6 +283,7 @@ export const labels = section({
     platform: { mt5: "MetaTrader 5", ctrader: "cTrader" },
     method: { bank_transfer_demo: "Bank transfer (demo)", stablecoin_demo: "Stablecoin wallet (demo)" },
     closeReason: { manual: "Manual", tp: "Take profit", sl: "Stop loss", breach: "Closed by breach", weekend: "Weekend close", system: "System" },
+    ticketStatus: { open: "Open", answered: "Answered", closed: "Closed" },
   },
   tr: {
     accountStatus: {
@@ -348,6 +349,7 @@ export const labels = section({
     platform: { mt5: "MetaTrader 5", ctrader: "cTrader" },
     method: { bank_transfer_demo: "Banka havalesi (demo)", stablecoin_demo: "Stablecoin cüzdanı (demo)" },
     closeReason: { manual: "Manuel", tp: "Kâr al", sl: "Zarar durdur", breach: "İhlal ile kapandı", weekend: "Hafta sonu kapanışı", system: "Sistem" },
+    ticketStatus: { open: "Açık", answered: "Yanıtlandı", closed: "Kapalı" },
   },
 });
 
