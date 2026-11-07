@@ -80,24 +80,28 @@ export function AccountPage() {
         <Card className="lg:col-span-2">
           <CardHeader title={a.rulesTitle} sub={t(a.rulesNote, { v: rs.version, date: rs.publishedAt })} />
           <div className="grid gap-6 p-5 md:grid-cols-2">
-            <dl className="space-y-1.5 text-sm">
+            <div>
               <p className="eyebrow text-navy-700">{m.site.selector.evalStage}</p>
-              {ev.map((r) => (
-                <div key={r.key} className="flex justify-between gap-3">
-                  <dt className="text-muted">{r.label}</dt>
-                  <dd className="num text-right">{evals.length > 1 ? r.values.join(" / ") : r.values[0]}</dd>
-                </div>
-              ))}
-            </dl>
-            <dl className="space-y-1.5 text-sm">
+              <dl className="mt-1 space-y-1.5 text-sm">
+                {ev.map((r) => (
+                  <div key={r.key} className="flex justify-between gap-3">
+                    <dt className="text-muted">{r.label}</dt>
+                    <dd className="num text-right">{evals.length > 1 ? r.values.join(" / ") : r.values[0]}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <div>
               <p className="eyebrow text-navy-700">{m.site.selector.fundedStage}</p>
-              {fu.map((r) => (
-                <div key={r.key} className="flex justify-between gap-3">
-                  <dt className="text-muted">{r.label}</dt>
-                  <dd className="num text-right">{r.values[0]}</dd>
-                </div>
-              ))}
-            </dl>
+              <dl className="mt-1 space-y-1.5 text-sm">
+                {fu.map((r) => (
+                  <div key={r.key} className="flex justify-between gap-3">
+                    <dt className="text-muted">{r.label}</dt>
+                    <dd className="num text-right">{r.values[0]}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </div>
         </Card>
         <Card className="lg:col-span-2">

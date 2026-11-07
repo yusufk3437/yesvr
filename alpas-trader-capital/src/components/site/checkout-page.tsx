@@ -340,24 +340,28 @@ export function CheckoutPage() {
           {c.rulesInline} · v{rs.version}
         </p>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
-          <dl className="space-y-1 text-sm">
+          <div>
             <p className="eyebrow text-navy-700">{m.site.selector.evalStage}</p>
-            {ev.map((r) => (
-              <div key={r.key} className="flex justify-between gap-3">
-                <dt className="text-muted">{r.label}</dt>
-                <dd className="num text-right">{evals.length > 1 ? r.values.join(" / ") : r.values[0]}</dd>
-              </div>
-            ))}
-          </dl>
-          <dl className="space-y-1 text-sm">
+            <dl className="mt-1 space-y-1 text-sm">
+              {ev.map((r) => (
+                <div key={r.key} className="flex justify-between gap-3">
+                  <dt className="text-muted">{r.label}</dt>
+                  <dd className="num text-right">{evals.length > 1 ? r.values.join(" / ") : r.values[0]}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <div>
             <p className="eyebrow text-navy-700">{m.site.selector.fundedStage}</p>
-            {fu.map((r) => (
-              <div key={r.key} className="flex justify-between gap-3">
-                <dt className="text-muted">{r.label}</dt>
-                <dd className="num text-right">{r.values[0]}</dd>
-              </div>
-            ))}
-          </dl>
+            <dl className="mt-1 space-y-1 text-sm">
+              {fu.map((r) => (
+                <div key={r.key} className="flex justify-between gap-3">
+                  <dt className="text-muted">{r.label}</dt>
+                  <dd className="num text-right">{r.values[0]}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
       </div>
     );

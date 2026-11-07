@@ -40,7 +40,7 @@ export function SiteFooter() {
   return (
     <footer className="no-print relative overflow-hidden bg-navy-950 text-paper/80">
       <Contours className="absolute inset-0 h-full w-full text-paper" opacity={0.06} seed={31} />
-      <div className="relative mx-auto max-w-[1320px] px-4 pb-10 pt-14 sm:px-6">
+      <div className="relative mx-auto max-w-[1320px] px-4 pb-24 pt-14 sm:px-6 sm:pb-20">
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <Wordmark tone="light" />
@@ -63,7 +63,7 @@ export function SiteFooter() {
           ))}
         </div>
         <p className="mt-12 max-w-4xl border-t border-paper/10 pt-6 text-[0.8rem] leading-relaxed text-paper/55">{m.footer.disclaimer}</p>
-        <p className="mt-3 text-[0.75rem] text-paper/40">© ALPAS Trader Capital · {m.footer.rights}</p>
+        <p className="mt-3 text-[0.75rem] text-paper/60">© ALPAS Trader Capital · {m.footer.rights}</p>
       </div>
     </footer>
   );

@@ -54,8 +54,37 @@ export function RouteMap({ stops, className, animate = false, tone = "light", he
   const lastDone = stops.reduce((m, s, i) => (s.state !== "next" ? i : m), -1);
   const ink = tone === "light" ? "var(--color-paper)" : "var(--color-navy-800)";
   const faint = tone === "light" ? "rgb(244 242 237 / 0.32)" : "rgb(15 34 64 / 0.25)";
+  const label = stops.map((s) => `${s.label}: ${s.state}`).join(", ");
+  const soft = tone === "light" ? "rgb(244 242 237 / 0.62)" : "var(--color-muted)";
   return (
-    <svg viewBox={`0 -40 ${width} ${height + 84}`} className={cx("w-full overflow-visible", className)} role="img" aria-label={stops.map((s) => `${s.label}: ${s.state}`).join(", ")}>
+    <>
+      {/* Small screens: the same route as a vertical stepper, so nothing scrolls sideways. */}
+      <ol className={cx("sm:hidden", compact ? "py-1" : "py-2")} aria-label={label}>
+        {stops.map((s, i) => {
+          const done = s.state !== "next";
+          return (
+            <li key={i} className="relative flex gap-3 pb-4 last:pb-0">
+              {i < stops.length - 1 && <span aria-hidden className="absolute top-4 left-[7px] h-full w-[2px]" style={{ background: i < lastDone ? "var(--color-brass)" : faint }} />}
+              <span
+                aria-hidden
+                className={cx("relative z-[1] mt-[3px] size-4 shrink-0 rounded-full border-2", s.state === "current" && "pulse-dot")}
+                style={{ background: done ? "var(--color-brass)" : tone === "light" ? "var(--color-navy-900)" : "var(--color-card)", borderColor: done ? ink : faint }}
+              />
+              <span className="min-w-0">
+                <span className="block font-display text-[0.95rem] font-bold tracking-[0.04em]" style={{ color: done ? ink : soft }}>
+                  {s.label}
+                </span>
+                {s.sub && !compact && (
+                  <span className="num block text-[0.8rem]" style={{ color: soft }}>
+                    {s.sub}
+                  </span>
+                )}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+      <svg viewBox={`0 -40 ${width} ${height + 84}`} className={cx("hidden w-full overflow-visible sm:block", className)} role="img" aria-label={label}>
       <path d={d} fill="none" stroke={faint} strokeWidth="2" strokeDasharray="2 9" strokeLinecap="round" />
       {lastDone > 0 && (
         <path
@@ -94,6 +123,7 @@ export function RouteMap({ stops, className, animate = false, tone = "light", he
           </g>
         );
       })}
-    </svg>
+      </svg>
+    </>
   );
 }

@@ -11,7 +11,7 @@ import { Monogram } from "../brand";
 import { Button, Card, Field, Input, LoadingBlock, Notice, cx } from "../ui";
 import { PageHero } from "./page-hero";
 
-export function VerifyForm({ initialId = "", initialCode = "" }: { initialId?: string; initialCode?: string }) {
+export function VerifyForm({ initialId = "", initialCode = "", stacked = false }: { initialId?: string; initialCode?: string; stacked?: boolean }) {
   const { m } = useI18n();
   const v = m.site.verify;
   const router = useRouter();
@@ -19,7 +19,7 @@ export function VerifyForm({ initialId = "", initialCode = "" }: { initialId?: s
   const [code, setCode] = useState(initialCode);
   return (
     <form
-      className="grid gap-3 sm:grid-cols-[1.4fr_1fr_auto] sm:items-end"
+      className={stacked ? "grid gap-3" : "grid gap-3 sm:grid-cols-[1.4fr_1fr_auto] sm:items-end"}
       onSubmit={(e) => {
         e.preventDefault();
         if (id.trim()) router.push(`/verify/${encodeURIComponent(id.trim().toUpperCase())}${code.trim() ? `?c=${encodeURIComponent(code.trim().toUpperCase())}` : ""}`);

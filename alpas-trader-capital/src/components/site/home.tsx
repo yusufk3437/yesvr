@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { ArrowRight, BookOpenCheck, CalendarClock, Scale } from "lucide-react";
+import { ArrowRight, BadgeCheck, BookOpenCheck, Calculator, CalendarClock, CircleSlash, HandCoins, Lock, Scale, ScrollText } from "lucide-react";
 import { applyBps } from "@/domain/money";
 import { useI18n } from "@/i18n/provider";
 import { useCatalog } from "@/lib/hooks";
@@ -14,6 +14,74 @@ import { Contours, RouteMap } from "../brand";
 import { Sparkline } from "../charts";
 import { Button, LinkButton, Meter, SectionTitle, Skeleton, Stat } from "../ui";
 import { ChallengeSelector } from "./challenge-selector";
+import { VerifyForm } from "./verify-page";
+
+/** Each commitment points at the page where it can be checked. */
+const CHARTER = [
+  { icon: Lock, href: "/rules" },
+  { icon: Calculator, href: "/rules#calc" },
+  { icon: HandCoins, href: "/payouts" },
+  { icon: BadgeCheck, href: "/verify" },
+  { icon: ScrollText, href: "/help" },
+  { icon: CircleSlash, href: "/about" },
+] as const;
+
+function TrustCharter() {
+  const { m } = useI18n();
+  const c = m.site.charter;
+  return (
+    <section className="relative isolate overflow-hidden border-y border-line-2 bg-card" aria-labelledby="charter-title">
+      <Contours className="absolute inset-0 -z-10 h-full w-full text-navy-700" opacity={0.05} seed={17} />
+      <div className="mx-auto grid max-w-[1320px] gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.55fr_1fr]">
+        <div>
+          <p className="eyebrow text-brass-700">{c.eyebrow}</p>
+          <h2 id="charter-title" className="mt-3 max-w-2xl font-serif text-[2rem] leading-[1.1] font-medium tracking-tight text-ink sm:text-[2.5rem]">
+            {c.title}
+          </h2>
+          <p className="mt-4 max-w-xl text-muted">{c.intro}</p>
+          <ol className="mt-10 grid gap-x-8 gap-y-7 sm:grid-cols-2">
+            {c.items.map((it, i) => {
+              const { icon: Icon, href } = CHARTER[i];
+              return (
+                <li key={it.title} className="group flex gap-4">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-full border border-brass/50 bg-brass-100/60 text-brass-700">
+                    <Icon className="size-[18px]" aria-hidden />
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-display text-[0.98rem] font-bold tracking-tight text-ink">
+                      <span className="num mr-1.5 text-brass-700">{String(i + 1).padStart(2, "0")}</span>
+                      {it.title}
+                    </h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted">{it.body}</p>
+                    <Link href={href} className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-navy-700 underline-offset-4 hover:underline">
+                      {it.link} <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                    </Link>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+        <aside className="self-start rounded-[18px] bg-navy-900 p-6 text-paper shadow-[0_24px_60px_-28px_rgb(8_20_42/0.55)] sm:p-7 lg:sticky lg:top-24">
+          <BadgeCheck className="size-7 text-brass" aria-hidden />
+          <h3 className="mt-4 font-serif text-2xl font-medium">{c.verifyTitle}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-paper/75">{c.verifyBody}</p>
+          <div className="mt-6 rounded-[12px] bg-card p-4 text-ink">
+            <VerifyForm stacked />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+            <Link href="/verify/ATC-CP-26-000041" className="inline-flex items-center gap-1 text-brass-300 underline-offset-4 hover:underline">
+              {c.tryValid} <ArrowRight className="size-3.5" aria-hidden />
+            </Link>
+            <Link href="/verify/ATC-CP-26-000040" className="inline-flex items-center gap-1 text-paper/75 underline-offset-4 hover:underline">
+              {c.tryRevoked} <ArrowRight className="size-3.5" aria-hidden />
+            </Link>
+          </div>
+        </aside>
+      </div>
+    </section>
+  );
+}
 
 export function Hero() {
   const { m, t, f } = useI18n();
@@ -40,7 +108,7 @@ export function Hero() {
           </LinkButton>
         </div>
         <div className="mt-12 -mx-2 overflow-x-auto px-2 pb-2">
-          <div className="min-w-[640px]">
+          <div className="sm:min-w-[640px]">
             <RouteMap
               animate
               height={220}
@@ -173,6 +241,8 @@ export function HomePage() {
           ))}
         </ol>
       </section>
+
+      <TrustCharter />
 
       <section className="bg-ink text-paper">
         <div className="mx-auto grid max-w-[1320px] gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_1.2fr]">

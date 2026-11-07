@@ -149,8 +149,9 @@ export function PayoutsPage() {
                 {p.fillMin}
               </Button>
             </div>
-            <dl className="num rounded-[12px] border border-line-2 bg-paper px-4 py-2 text-sm">
+            <div className="num rounded-[12px] border border-line-2 bg-paper px-4 py-2 text-sm">
               <p className="py-1 text-xs font-semibold uppercase tracking-[0.08em] text-muted">{p.summary}</p>
+              <dl>
               {[
                 [p.gross, f.money(quote.gross)],
                 [t(p.trader, { split: f.bps(quote.splitBps) }), f.money(quote.traderShare)],
@@ -167,7 +168,8 @@ export function PayoutsPage() {
                 <dt>{p.net}</dt>
                 <dd>{f.money(quote.netToTrader)}</dd>
               </div>
-            </dl>
+              </dl>
+            </div>
             <p className="text-xs text-muted">{p.reserveNote}</p>
             <Button variant="accent" disabled={!elig.eligible || !validAmount} onClick={submit}>
               {p.submit}

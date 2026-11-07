@@ -24,6 +24,7 @@ npm run dev          # http://localhost:3000
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (Next + React Compiler rules) |
 | `npm run e2e` | Full flow in a real browser with Playwright (`BASE_URL=http://localhost:3000`). Run `npx playwright install chromium` once if needed. |
+| `npm run a11y` | axe-core WCAG 2 A/AA audit of the public and signed-in pages, EN and TR (`BASE_URL=…`) |
 
 Requirements: Node.js ≥ 20.9. No `.env` is required. To use a real LLM, see [`.env.example`](./.env.example).
 
@@ -100,6 +101,9 @@ src/
 - **Certificates:** a single layout spec renders both the SVG share preview and the A4-landscape PDF (pdf-lib, embedded subset fonts, vector QR). Sample PDFs: [`docs/samples/`](./docs/samples).
 - **Next.js 16:** `cacheComponents` is intentionally off; user-specific views are rendered from the client store, and the language comes from a cookie.
 - **Brand:** "stepped summit" seal logo — a seal ring with an A-shaped summit whose left face climbs in three steps (Phase 1 → Phase 2 → Funded) and a brass apex. One geometry (`src/lib/topo.ts` → `MONOGRAM`) drives the web mark, favicon and certificates. Serif wordmark and marketing headings (Newsreader), Archivo/IBM Plex for data.
+- **Trust charter** (home page): six commitments, each linked to the page where it can be checked (rule lock, recomputable numbers, no automatic "paid", revocable certificates, written reasons + audit log, no borrowed credibility), next to a live certificate check with valid and revoked examples.
+- **Mobile:** the route maps (home, challenges, dashboard) turn into a vertical stepper below 640 px, so nothing scrolls sideways; the footer leaves room for the floating Assistant button.
+- **Sharing:** `public/og.png` (1200×630, rendered from the brand geometry) plus Open Graph / Twitter metadata; set `NEXT_PUBLIC_SITE_URL` for absolute URLs.
 - **Design:** deep navy, warm off-white and brass for an institutional, trustworthy feel; brass text on light backgrounds uses a darker tone (5.5:1 contrast). The "route to capital" language (topographic contours + waypoints) carries across the hero, stage diagrams, dashboard progress and certificates. The chart palette was checked with a colour-blindness validator. Reduced motion, keyboard use and focus styles are supported.
 
 ## Verification (at time of delivery)
@@ -108,6 +112,7 @@ src/
 - `npm run typecheck`, `npm run lint` → clean
 - `npm run build` → successful (34 routes)
 - `npm run e2e` → **24/24** checks on the production server, with no console errors (includes the budget planner)
+- `npm run a11y` → **0 violations** (axe-core, WCAG 2 A/AA) on 9 public pages and 6 signed-in dashboard pages, in EN and TR
 - 390 px, 768 px and 1440 px screenshots, EN and TR: no horizontal overflow
 - PDFs rasterized with `pdftoppm` and inspected visually; QR codes decoded with `jsQR` and confirmed to point to the verification URL
 
@@ -120,7 +125,7 @@ src/
 - Demo data lives only in the browser; certificates issued in a different browser show as "not found" on the verification page (the seeded examples verify everywhere).
 - Demo sign-in and the operations role switch are not real authorization.
 - Competitor figures were compiled from search summaries of the official domains, because the session's network blocked direct access to the sites; they are marked "unverified" (see `docs/benchmark.md`).
-- No dark theme. No automated accessibility audit (axe) was run; keyboard navigation and contrast were checked manually.
+- No dark theme. The axe audit covers automatically detectable WCAG issues; screen-reader testing with real assistive technology has not been done.
 - The real LLM mode could not be called without a key in this environment; the adapter and validation guard are covered by unit tests.
 
 ## Moving to a separate repository

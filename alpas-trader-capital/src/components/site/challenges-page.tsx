@@ -39,7 +39,7 @@ export function ChallengesPage() {
                   <span className="text-xs text-muted">{t(c.steps, { n: p.steps })}</span>
                 </div>
                 <div className="overflow-x-auto px-3 pb-2 pt-6">
-                  <div className="min-w-[520px]">
+                  <div className="sm:min-w-[520px]">
                     <RouteMap
                       tone="dark"
                       height={150}

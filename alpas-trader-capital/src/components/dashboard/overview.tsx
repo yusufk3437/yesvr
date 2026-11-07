@@ -108,7 +108,7 @@ export function OverviewPage() {
 
       <Card className="mb-5 overflow-hidden">
         <div className="overflow-x-auto px-4 pt-5">
-          <div className="min-w-[560px]">
+          <div className="sm:min-w-[560px]">
             <RouteMap stops={stops} tone="dark" compact height={120} />
           </div>
         </div>

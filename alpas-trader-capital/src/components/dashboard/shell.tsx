@@ -116,7 +116,7 @@ function Inner({ children }: { children: React.ReactNode }) {
     <nav aria-label="Dashboard" className="space-y-6">
       {groups.map((g) => (
         <div key={g.title}>
-          <p className="eyebrow px-3 text-paper/40">{g.title}</p>
+          <p className="eyebrow px-3 text-paper/60">{g.title}</p>
           <ul className="mt-2 space-y-0.5">
             {g.items.map((it) => (
               <li key={it.href}>

@@ -24,7 +24,7 @@
   --color-line: #d6d0c3;
   --color-line-2: #e5e0d5;
   --color-muted: #5c6470;
-  --color-subtle: #868b93;
+  --color-subtle: #656a73;
   /* Brass: base for fills and accents on navy; -700 for text on light (5.5:1). */
   --color-brass: #c4a064;
   --color-brass-700: #7a5c2e;
@@ -32,11 +32,13 @@
   --color-brass-100: #f3ebda;
   --color-gain: #237a5f;
   --color-gain-100: #dcefe6;
+  --color-gain-700: #1b6650;
   --color-loss: #a8323a;
   --color-loss-100: #f6e0df;
   --color-warn: #8a6410;
   --color-warn-500: #c18f1f;
   --color-warn-100: #f5ebcf;
+  --color-warn-700: #765509;
   --color-info: #3f5f78;
   --color-info-100: #e0e9f0;
 
@@ -148,6 +150,18 @@ body {
   animation: pulse-ring 2.4s ease-out infinite;
 }
 
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgb(196 160 100 / 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 9px rgb(196 160 100 / 0);
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 2.4s ease-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -162,6 +176,9 @@ body {
   }
   .pulse-ring {
     display: none;
+  }
+  .pulse-dot {
+    animation: none;
   }
 }
 

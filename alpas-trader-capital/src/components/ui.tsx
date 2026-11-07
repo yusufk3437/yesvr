@@ -81,9 +81,9 @@ export function CardHeader({ title, sub, action, id }: { title: React.ReactNode;
 
 export type Tone = "gain" | "loss" | "warn" | "info" | "neutral" | "accent" | "navy";
 const toneCls: Record<Tone, string> = {
-  gain: "bg-gain-100 text-gain border-gain/25",
+  gain: "bg-gain-100 text-gain-700 border-gain/25",
   loss: "bg-loss-100 text-loss border-loss/25",
-  warn: "bg-warn-100 text-warn border-warn-500/30",
+  warn: "bg-warn-100 text-warn-700 border-warn-500/30",
   info: "bg-info-100 text-info border-info/25",
   neutral: "bg-paper-2 text-graphite-2 border-line",
   accent: "bg-brass-100 text-brass-700 border-brass/25",

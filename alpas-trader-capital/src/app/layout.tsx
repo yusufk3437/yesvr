@@ -12,8 +12,18 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { default: m.title, template: "%s · ALPAS Trader Capital" },
     description: m.description,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
     robots: { index: false, follow: false },
     icons: { icon: "/icon.svg" },
+    openGraph: {
+      type: "website",
+      siteName: "ALPAS Trader Capital",
+      title: m.title,
+      description: m.description,
+      locale: locale === "tr" ? "tr_TR" : "en_US",
+      images: [{ url: "/og.png", width: 1200, height: 630, alt: "ALPAS Trader Capital — a clear route from evaluation to funded trading (product prototype)" }],
+    },
+    twitter: { card: "summary_large_image", title: m.title, description: m.description, images: ["/og.png"] },
   };
 }
 

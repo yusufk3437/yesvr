@@ -283,9 +283,12 @@ export function PnlCalendar({ days, monthKey, labels }: { days: DayStat[]; month
           <div key={w}>{w}</div>
         ))}
       </div>
-      <div className="mt-1 grid grid-cols-7 gap-1" role="grid" aria-label={monthKey}>
-        {cells.map((key, i) => {
-          if (!key) return <div key={i} aria-hidden />;
+      <div className="mt-1 space-y-1" role="grid" aria-label={monthKey}>
+        {Array.from({ length: cells.length / 7 }, (_, w) => (
+          <div key={w} role="row" className="grid grid-cols-7 gap-1">
+            {cells.slice(w * 7, w * 7 + 7).map((key, j) => {
+          const i = w * 7 + j;
+          if (!key) return <div key={i} role="gridcell" aria-hidden />;
           const d = byKey.get(key);
           const wd = weekdayOfKey(key);
           const weekend = wd === 0 || wd === 6;
@@ -315,7 +318,9 @@ export function PnlCalendar({ days, monthKey, labels }: { days: DayStat[]; month
               )}
             </div>
           );
-        })}
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );

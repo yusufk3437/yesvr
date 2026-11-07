@@ -105,7 +105,7 @@ export function VerificationPage() {
                     <div className="mt-2 text-sm text-muted">
                       <p>{t(v.signed, { name: c.contract.signerName ?? "", date: f.dateTime(c.contract.signedAt ?? 0) })}</p>
                       {c.fundedAccountId && (
-                        <Link href={`/dashboard?account=${c.fundedAccountId}`} className="text-navy-700 hover:underline">
+                        <Link href={`/dashboard?account=${c.fundedAccountId}`} className="font-medium text-navy-700 underline underline-offset-2 hover:text-navy-900">
                           {t(v.activated, { id: c.fundedAccountId })} →
                         </Link>
                       )}
