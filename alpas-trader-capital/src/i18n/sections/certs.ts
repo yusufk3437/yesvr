@@ -7,7 +7,7 @@ export const certs = section({
     title: { challenge_passed: "Challenge Passed", funded_trader: "Funded Trader", payout: "Payout" },
     certifies: "This certifies that",
     statement: {
-      challenge_passed: "completed every evaluation stage of {program} and passed the final review.",
+      challenge_passed: "completed every evaluation stage of the {program} programme and passed the final review.",
       funded_trader: "was activated as a funded trader on a simulated {program} account after identity verification and the trader agreement.",
       payout: "received a performance reward paid under the {program} programme.",
     },

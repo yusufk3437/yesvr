@@ -53,7 +53,7 @@ export function AdminPanel() {
           <Link href="/">
             <Wordmark tone="light" />
           </Link>
-          <span className="font-display text-sm font-bold uppercase tracking-[0.14em] text-copper-300">{a.title}</span>
+          <span className="font-display text-sm font-bold uppercase tracking-[0.14em] text-brass-300">{a.title}</span>
           <div className="ml-auto flex items-center gap-2">
             <LangSwitch tone="light" />
             {isOps && (
@@ -212,7 +212,7 @@ function CatalogAdmin() {
                   v{r.version} · {r.publishedAt}
                 </span>
                 <span className="text-xs text-muted">{t(c.inUse, { n: state.challenges.filter((ch) => ch.ruleSetId === r.id).length })}</span>
-                {r.id === current.id && <Pill tone="petrol">{c.current}</Pill>}
+                {r.id === current.id && <Pill tone="navy">{c.current}</Pill>}
               </li>
             ))}
           </ul>
@@ -308,7 +308,7 @@ function AccountsAdmin({ now }: { now: number }) {
                 <td className={`${td} num`}>{a.id}</td>
                 <td className={td}>{getUser(state, a.userId)?.name}</td>
                 <td className={td}>
-                  {l(state.catalog.programs.find((p) => p.id === a.programId)!.name).replace("ALPAS ", "")} {formatSize(a.size)}
+                  {l(state.catalog.programs.find((p) => p.id === a.programId)!.name)} {formatSize(a.size)}
                 </td>
                 <td className={td}>{m.labels.phase[a.kind]}</td>
                 <td className={td}>
@@ -535,7 +535,7 @@ function CertificatesAdmin() {
           {state.certificates.map((x) => (
             <tr key={x.id}>
               <td className={`${td} num`}>
-                <Link href={`/verify/${x.id}`} className="text-petrol-700 hover:underline">
+                <Link href={`/verify/${x.id}`} className="text-navy-700 hover:underline">
                   {x.id}
                 </Link>
               </td>
@@ -595,7 +595,7 @@ function SupportAdmin() {
           </div>
           <ul className="mt-3 space-y-2 text-sm">
             {tk.messages.map((msg, i) => (
-              <li key={i} className={msg.from === "ops" ? "rounded-md bg-petrol-100/60 px-3 py-2" : "rounded-md bg-paper px-3 py-2"}>
+              <li key={i} className={msg.from === "ops" ? "rounded-md bg-navy-100/60 px-3 py-2" : "rounded-md bg-paper px-3 py-2"}>
                 <p className="whitespace-pre-wrap">{msg.body}</p>
               </li>
             ))}

@@ -16,7 +16,7 @@ import { Button, Card, CardHeader, Dialog, EmptyState, Field, Input, LinkButton,
 import { PageTitle } from "./common";
 import { useAccountSelection } from "./selection";
 
-export const payoutTone = (s: Payout["status"]): Tone => (s === "paid" ? "gain" : s === "rejected" ? "loss" : s === "cancelled" ? "neutral" : s === "approved" || s === "processing" ? "petrol" : "warn");
+export const payoutTone = (s: Payout["status"]): Tone => (s === "paid" ? "gain" : s === "rejected" ? "loss" : s === "cancelled" ? "neutral" : s === "approved" || s === "processing" ? "navy" : "warn");
 
 export function PayoutsPage() {
   const { m, t, f, l } = useI18n();
@@ -225,7 +225,7 @@ export function PayoutsPage() {
                       </Button>
                     )}
                     {x.certificateId && (
-                      <Link href="/dashboard/certificates" className="inline-flex h-8 items-center rounded-[10px] px-3 text-[0.82rem] text-petrol-700 hover:bg-paper-2">
+                      <Link href="/dashboard/certificates" className="inline-flex h-8 items-center rounded-[10px] px-3 text-[0.82rem] text-navy-700 hover:bg-paper-2">
                         {p.certificate} →
                       </Link>
                     )}
@@ -234,7 +234,7 @@ export function PayoutsPage() {
                 <ol className="relative space-y-3 border-l border-line pl-5" aria-label={p.timeline}>
                   {x.timeline.map((e, i) => (
                     <li key={i} className="relative text-sm">
-                      <span className={cx("absolute -left-[26px] top-1 size-3 rounded-full border-2 border-card", e.status === "paid" ? "bg-gain" : e.status === "rejected" ? "bg-loss" : e.status === "cancelled" ? "bg-subtle" : "bg-copper")} aria-hidden />
+                      <span className={cx("absolute -left-[26px] top-1 size-3 rounded-full border-2 border-card", e.status === "paid" ? "bg-gain" : e.status === "rejected" ? "bg-loss" : e.status === "cancelled" ? "bg-subtle" : "bg-brass")} aria-hidden />
                       <p className="font-medium">{m.labels.payoutStatus[e.status]}</p>
                       <p className="num text-xs text-muted">
                         {f.dateTime(e.at)} · {p.actor[e.actor]}
@@ -249,7 +249,7 @@ export function PayoutsPage() {
         )}
       </Card>
       <p className="mt-3 text-xs text-muted">
-        <Link href="/payouts" className="text-petrol-700 hover:underline">
+        <Link href="/payouts" className="text-navy-700 hover:underline">
           {m.site.payoutsPage.title} →
         </Link>
       </p>

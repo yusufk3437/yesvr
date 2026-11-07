@@ -5,6 +5,7 @@ import { useI18n } from "@/i18n/provider";
 import { useCatalog } from "@/lib/hooks";
 import { RouteMap } from "../brand";
 import { Card, Table, td, th } from "../ui";
+import { BudgetPlanner } from "./budget-planner";
 import { ChallengeSelector } from "./challenge-selector";
 import { PageHero } from "./page-hero";
 import { evaluationRows, fundedRows } from "./rule-rows";
@@ -22,7 +23,10 @@ export function ChallengesPage() {
         <ChallengeSelector variant="page" />
       </section>
 
-      <section className="mx-auto max-w-[1320px] px-4 pb-12 sm:px-6">
+      <BudgetPlanner />
+
+
+      <section className="mx-auto max-w-[1320px] px-4 py-12 sm:px-6">
         <h2 className="font-display text-2xl font-extrabold tracking-tight">{c.stageRoute}</h2>
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           {programs.map((p) => {
@@ -64,7 +68,7 @@ export function ChallengesPage() {
             [c.termsFee, c.termsFeeBody],
             [c.termsReward, c.termsRewardBody],
           ].map(([a, b]) => (
-            <div key={a} className="border-l-2 border-copper pl-4">
+            <div key={a} className="border-l-2 border-brass pl-4">
               <h3 className="font-display font-bold">{a}</h3>
               <p className="mt-1 text-sm leading-relaxed text-muted">{b}</p>
             </div>
@@ -94,7 +98,7 @@ export function ChallengesPage() {
                 <div className="flex flex-wrap gap-2 border-b border-line-2 px-5 py-3 text-sm">
                   {p.sizes.map((s) => (
                     <span key={s.size} className="num rounded-full border border-line px-3 py-1">
-                      {formatSize(s.size)} · <b className="font-semibold text-copper-700">{f.money(s.price, { decimals: 0 })}</b>
+                      {formatSize(s.size)} · <b className="font-semibold text-brass-700">{f.money(s.price, { decimals: 0 })}</b>
                     </span>
                   ))}
                 </div>
@@ -106,10 +110,10 @@ export function ChallengesPage() {
                       </th>
                       {evals.map((e) => (
                         <th key={e.kind} className={th} scope="col">
-                          {m.site.selector.evalStage} · {l(e.label)}
+                          {evals.length > 1 ? `${m.site.selector.evalStage} · ${l(e.label)}` : m.site.selector.evalStage}
                         </th>
                       ))}
-                      <th className={`${th} bg-petrol-100/50`} scope="col">
+                      <th className={`${th} bg-navy-100/50`} scope="col">
                         {m.site.selector.fundedStage}
                       </th>
                     </tr>
@@ -125,7 +129,7 @@ export function ChallengesPage() {
                             {v}
                           </td>
                         ))}
-                        <td className={`${td} num bg-petrol-100/30`}>{fu.find((x) => x.key === r.key)?.values[0] ?? "—"}</td>
+                        <td className={`${td} num bg-navy-100/30`}>{fu.find((x) => x.key === r.key)?.values[0] ?? "—"}</td>
                       </tr>
                     ))}
                     {fu
@@ -140,7 +144,7 @@ export function ChallengesPage() {
                               —
                             </td>
                           ))}
-                          <td className={`${td} num bg-petrol-100/30`}>{r.values[0]}</td>
+                          <td className={`${td} num bg-navy-100/30`}>{r.values[0]}</td>
                         </tr>
                       ))}
                   </tbody>

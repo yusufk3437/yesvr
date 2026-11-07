@@ -22,10 +22,10 @@ export function AssistantLauncher() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="no-print fixed bottom-4 right-4 z-40 inline-flex h-12 items-center gap-2 rounded-full bg-petrol-800 pl-3 pr-4 text-sm font-medium text-paper shadow-xl ring-1 ring-paper/10 transition-transform hover:-translate-y-0.5 hover:bg-petrol-700 sm:bottom-6 sm:right-6"
+        className="no-print fixed bottom-4 right-4 z-40 inline-flex h-12 items-center gap-2 rounded-full bg-navy-800 pl-3 pr-4 text-sm font-medium text-paper shadow-xl ring-1 ring-paper/10 transition-transform hover:-translate-y-0.5 hover:bg-navy-700 sm:bottom-6 sm:right-6"
         aria-haspopup="dialog"
       >
-        <MessageCircleQuestion className="size-5 text-copper-300" aria-hidden />
+        <MessageCircleQuestion className="size-5 text-brass-300" aria-hidden />
         <span className="hidden sm:inline">{m.common.openAssistant}</span>
         <span className="sm:hidden">{m.assistant.title.replace("ALPAS ", "")}</span>
       </button>
@@ -41,7 +41,7 @@ export function AssistantLauncher() {
       >
         {open && (
           <div className="flex h-full flex-col">
-            <div className="flex items-center justify-between gap-2 bg-petrol-900 px-4 py-3 text-paper">
+            <div className="flex items-center justify-between gap-2 bg-navy-900 px-4 py-3 text-paper">
               <h2 className="font-display text-base font-bold tracking-tight">{m.assistant.title}</h2>
               <div className="flex items-center gap-1">
                 <Link href="/dashboard/assistant" onClick={() => setOpen(false)} className="rounded-md p-1.5 text-paper/70 hover:bg-paper/10 hover:text-paper" aria-label={m.assistant.fullPage} title={m.assistant.fullPage}>

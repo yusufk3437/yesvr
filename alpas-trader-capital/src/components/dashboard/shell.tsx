@@ -128,9 +128,9 @@ function Inner({ children }: { children: React.ReactNode }) {
                     isActive(it.href) ? "bg-paper/10 text-paper" : "text-paper/65 hover:bg-paper/5 hover:text-paper",
                   )}
                 >
-                  <it.icon className={cx("size-4", isActive(it.href) ? "text-copper-300" : "")} aria-hidden />
+                  <it.icon className={cx("size-4", isActive(it.href) ? "text-brass-300" : "")} aria-hidden />
                   <span className="flex-1">{it.label}</span>
-                  {"badge" in it && it.badge ? <span className="num rounded-full bg-copper px-1.5 text-[0.7rem] font-semibold text-white">{it.badge}</span> : null}
+                  {"badge" in it && it.badge ? <span className="num rounded-full bg-brass px-1.5 text-[0.7rem] font-semibold text-white">{it.badge}</span> : null}
                 </Link>
               </li>
             ))}
@@ -146,12 +146,15 @@ function Inner({ children }: { children: React.ReactNode }) {
   );
   return (
     <div className="lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
-      <aside className="no-print sticky top-0 hidden h-dvh flex-col overflow-y-auto bg-petrol-950 px-3 py-5 lg:flex">
-        <Link href="/" className="px-3">
-          <Wordmark tone="light" />
-        </Link>
-        <div className="mt-8 flex-1">{nav}</div>
-      </aside>
+      {/* The column stretches to the full page height; the nav inside stays pinned. */}
+      <div className="no-print hidden bg-navy-950 lg:block">
+        <aside className="sticky top-0 flex h-dvh flex-col overflow-y-auto px-3 py-5">
+          <Link href="/" className="px-3">
+            <Wordmark tone="light" />
+          </Link>
+          <div className="mt-8 flex-1">{nav}</div>
+        </aside>
+      </div>
       <div className="min-w-0">
         <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-line-2 bg-paper/90 px-4 backdrop-blur sm:px-6">
           <button type="button" className="rounded-md p-1.5 lg:hidden" aria-label={m.common.openMenu} aria-expanded={open} onClick={() => setOpen(true)}>
@@ -162,7 +165,7 @@ function Inner({ children }: { children: React.ReactNode }) {
             <LangSwitch className="hidden sm:inline-flex" />
             <Link href="/dashboard/notifications" className="relative rounded-md p-2 text-muted hover:text-ink" aria-label={`${n.notifications}${unread ? ` (${unread})` : ""}`}>
               <Bell className="size-5" aria-hidden />
-              {unread > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-copper" aria-hidden />}
+              {unread > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-brass" aria-hidden />}
             </Link>
             <span className="hidden text-sm font-medium md:inline">{user?.name}</span>
             <button
@@ -185,8 +188,8 @@ function Inner({ children }: { children: React.ReactNode }) {
       </div>
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={m.common.menu}>
-          <button type="button" className="absolute inset-0 bg-petrol-950/60" aria-label={m.common.closeMenu} onClick={() => setOpen(false)} />
-          <div className="absolute inset-y-0 left-0 w-[84%] max-w-xs overflow-y-auto bg-petrol-950 px-3 py-5">
+          <button type="button" className="absolute inset-0 bg-navy-950/60" aria-label={m.common.closeMenu} onClick={() => setOpen(false)} />
+          <div className="absolute inset-y-0 left-0 w-[84%] max-w-xs overflow-y-auto bg-navy-950 px-3 py-5">
             <div className="flex items-center justify-between px-3">
               <Wordmark tone="light" />
               <button type="button" className="rounded-md p-1.5 text-paper/70" aria-label={m.common.closeMenu} onClick={() => setOpen(false)}>
@@ -217,11 +220,11 @@ function AccountSelect() {
         id="acct"
         value={account?.id}
         onChange={(e) => select(e.target.value)}
-        className="num h-9 w-full max-w-[min(420px,100%)] truncate rounded-[9px] border border-line bg-white px-2.5 text-[0.84rem] font-medium focus:border-petrol-600 focus:outline-none"
+        className="num h-9 w-full max-w-[min(420px,100%)] truncate rounded-[9px] border border-line bg-white px-2.5 text-[0.84rem] font-medium focus:border-navy-600 focus:outline-none"
       >
         {accounts.map((a) => (
           <option key={a.id} value={a.id}>
-            {a.id} · {l(programs.find((p) => p.id === a.programId)!.name).replace("ALPAS ", "")} {formatSize(a.size)} · {m.labels.phase[a.kind]} · {m.labels.accountStatus[a.status]}
+            {a.id} · {l(programs.find((p) => p.id === a.programId)!.name)} {formatSize(a.size)} · {m.labels.phase[a.kind]} · {m.labels.accountStatus[a.status]}
           </option>
         ))}
       </select>

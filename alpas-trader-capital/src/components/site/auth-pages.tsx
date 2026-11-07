@@ -16,11 +16,11 @@ import { Button, Card, Checkbox, Field, Input, LinkButton, Notice, Select, useTo
 function AuthShell({ title, intro, children, aside }: { title: string; intro: string; children: React.ReactNode; aside?: React.ReactNode }) {
   return (
     <div className="relative isolate overflow-hidden">
-      <Contours className="absolute inset-0 -z-10 h-full w-full text-petrol-700" opacity={0.07} seed={41} />
+      <Contours className="absolute inset-0 -z-10 h-full w-full text-navy-700" opacity={0.07} seed={41} />
       <div className="mx-auto grid max-w-[1100px] gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1fr_380px]">
         <Card className="p-6 sm:p-8">
           <Monogram className="size-10" />
-          <h1 className="mt-5 font-display text-2xl font-extrabold tracking-tight">{title}</h1>
+          <h1 className="mt-5 font-serif text-[1.9rem] font-semibold">{title}</h1>
           <p className="mt-1 text-sm text-muted">{intro}</p>
           <div className="mt-6">{children}</div>
         </Card>
@@ -125,14 +125,14 @@ export function LoginPage() {
           <Button type="submit" variant="primary">
             {m.auth.submitLogin}
           </Button>
-          <Link href="/reset-password" className="text-sm text-petrol-700 hover:underline">
+          <Link href="/reset-password" className="text-sm text-navy-700 hover:underline">
             {m.auth.forgot}
           </Link>
         </div>
       </form>
       <p className="mt-6 text-sm text-muted">
         {m.auth.noAccount}{" "}
-        <Link href="/register" className="font-medium text-petrol-700 hover:underline">
+        <Link href="/register" className="font-medium text-navy-700 hover:underline">
           {m.common.register}
         </Link>
       </p>
@@ -190,11 +190,11 @@ export function RegisterPage() {
             label={
               <>
                 {m.auth.acceptTerms.split("{terms}")[0]}
-                <Link href="/legal/terms" className="text-petrol-700 underline">
+                <Link href="/legal/terms" className="text-navy-700 underline">
                   {m.auth.terms}
                 </Link>
                 {m.auth.acceptTerms.split("{terms}")[1].split("{privacy}")[0]}
-                <Link href="/legal/privacy" className="text-petrol-700 underline">
+                <Link href="/legal/privacy" className="text-navy-700 underline">
                   {m.auth.privacy}
                 </Link>
                 {m.auth.acceptTerms.split("{privacy}")[1]}
@@ -215,7 +215,7 @@ export function RegisterPage() {
       </form>
       <p className="mt-6 text-sm text-muted">
         {m.auth.haveAccount}{" "}
-        <Link href="/login" className="font-medium text-petrol-700 hover:underline">
+        <Link href="/login" className="font-medium text-navy-700 hover:underline">
           {m.common.signIn}
         </Link>
       </p>

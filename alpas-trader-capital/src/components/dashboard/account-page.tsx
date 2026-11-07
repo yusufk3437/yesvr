@@ -67,10 +67,10 @@ export function AccountPage() {
               <p className="text-sm font-semibold">{a.downloads}</p>
               <p className="mt-1 text-sm text-muted">{a.downloadsNote}</p>
               <div className="mt-2 flex flex-wrap gap-3 text-sm">
-                <Link href="/help#help-platform" className="text-petrol-700 hover:underline">
+                <Link href="/help#help-platform" className="text-navy-700 hover:underline">
                   {m.nav.help} →
                 </Link>
-                <Link href={`/rules?program=${account.programId}&version=${rs.version}`} className="text-petrol-700 hover:underline">
+                <Link href={`/rules?program=${account.programId}&version=${rs.version}`} className="text-navy-700 hover:underline">
                   {m.nav.rules} →
                 </Link>
               </div>
@@ -81,7 +81,7 @@ export function AccountPage() {
           <CardHeader title={a.rulesTitle} sub={t(a.rulesNote, { v: rs.version, date: rs.publishedAt })} />
           <div className="grid gap-6 p-5 md:grid-cols-2">
             <dl className="space-y-1.5 text-sm">
-              <p className="eyebrow text-petrol-700">{m.site.selector.evalStage}</p>
+              <p className="eyebrow text-navy-700">{m.site.selector.evalStage}</p>
               {ev.map((r) => (
                 <div key={r.key} className="flex justify-between gap-3">
                   <dt className="text-muted">{r.label}</dt>
@@ -90,7 +90,7 @@ export function AccountPage() {
               ))}
             </dl>
             <dl className="space-y-1.5 text-sm">
-              <p className="eyebrow text-petrol-700">{m.site.selector.fundedStage}</p>
+              <p className="eyebrow text-navy-700">{m.site.selector.fundedStage}</p>
               {fu.map((r) => (
                 <div key={r.key} className="flex justify-between gap-3">
                   <dt className="text-muted">{r.label}</dt>
@@ -107,7 +107,7 @@ export function AccountPage() {
               const acc = getAccount(state, id)!;
               return (
                 <li key={id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm">
-                  <Link href={`/dashboard?account=${id}`} className="num font-medium text-petrol-700 hover:underline">
+                  <Link href={`/dashboard?account=${id}`} className="num font-medium text-navy-700 hover:underline">
                     {id}
                   </Link>
                   <span className="text-muted">{l(rs.phases[acc.phaseIndex].label)}</span>

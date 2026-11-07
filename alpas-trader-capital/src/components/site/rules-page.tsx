@@ -74,7 +74,7 @@ export function RulesPage() {
       <PageHero eyebrow={r.eyebrow} title={r.title} intro={r.intro}>
         <div className="mt-6 flex flex-wrap gap-2">
           {programs.map((p) => (
-            <Pill key={p.id} tone="petrol" icon={false}>
+            <Pill key={p.id} tone="navy" icon={false}>
               {l(p.name)} v{current(p.id).version} · {t(r.published, { date: current(p.id).publishedAt })}
             </Pill>
           ))}
@@ -85,7 +85,7 @@ export function RulesPage() {
         <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
           <div>
             <p className="mb-2 text-sm font-medium">{r.program}</p>
-            <Segmented value={program} onChange={(v) => update({ program: v, version: null, stage: null })} label={r.program} options={programs.map((p) => ({ value: p.id, label: l(p.name).replace("ALPAS ", "") }))} />
+            <Segmented value={program} onChange={(v) => update({ program: v, version: null, stage: null })} label={r.program} options={programs.map((p) => ({ value: p.id, label: l(p.name) }))} />
           </div>
           <Field label={r.version} htmlFor="rule-version">
             <Select id="rule-version" value={version} onChange={(e) => update({ version: e.target.value })}>
@@ -141,7 +141,7 @@ export function RulesPage() {
                   <article
                     key={a.id}
                     id={a.anchor}
-                    className="scroll-mt-28 rounded-[14px] border border-line-2 bg-card p-5 transition-shadow target:border-copper target:ring-2 target:ring-copper/40"
+                    className="scroll-mt-28 rounded-[14px] border border-line-2 bg-card p-5 transition-shadow target:border-brass target:ring-2 target:ring-brass/40"
                   >
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <h3 className="font-display text-base font-bold">{a.title[locale]}</h3>
@@ -152,12 +152,12 @@ export function RulesPage() {
                     <p className="mt-2 text-[0.94rem] leading-relaxed text-graphite">{a.body[locale]}</p>
                     {a.example && (
                       <p className="num mt-3 rounded-[10px] bg-paper px-3 py-2 text-sm">
-                        <span className="mr-2 text-xs font-semibold uppercase tracking-[0.08em] text-copper-700">{r.example}</span>
+                        <span className="mr-2 text-xs font-semibold uppercase tracking-[0.08em] text-brass-700">{r.example}</span>
                         {a.example[locale]}
                       </p>
                     )}
                     <div className="mt-3 flex flex-wrap gap-3 text-xs">
-                      <button type="button" className="inline-flex items-center gap-1 text-petrol-700 hover:underline" onClick={() => ask(a.title[locale])}>
+                      <button type="button" className="inline-flex items-center gap-1 text-navy-700 hover:underline" onClick={() => ask(a.title[locale])}>
                         <MessageCircleQuestion className="size-3.5" aria-hidden /> {r.ask}
                       </button>
                       <button

@@ -22,13 +22,13 @@ export function Hero() {
   const minPrice = Math.min(...programs.flatMap((p) => p.sizes.map((s) => s.price)));
   const versions = programs.map((p) => `${p.code} v${current(p.id).version}`).join(" · ");
   return (
-    <section className="relative isolate overflow-hidden bg-petrol-900 text-paper">
+    <section className="relative isolate overflow-hidden bg-navy-900 text-paper">
       <Contours className="absolute inset-0 -z-10 h-full w-full text-paper" opacity={0.11} seed={11} levels={11} />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-transparent to-petrol-950/70" aria-hidden />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-transparent to-navy-950/70" aria-hidden />
       <div className="mx-auto max-w-[1320px] px-4 pb-10 pt-16 sm:px-6 sm:pt-24">
-        <p className="eyebrow fade-up text-copper-300">{h.eyebrow}</p>
-        <h1 className="fade-up mt-4 max-w-4xl font-display text-[2.55rem] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[4rem] lg:text-[4.6rem]">
-          {h.titleA} <span className="font-serif font-normal italic tracking-[-0.01em] text-copper-300">{h.titleB}</span>
+        <p className="eyebrow fade-up text-brass-300">{h.eyebrow}</p>
+        <h1 className="fade-up mt-4 max-w-4xl font-serif text-[2.7rem] font-semibold leading-[1.04] tracking-[-0.015em] sm:text-[4.2rem] lg:text-[4.8rem]">
+          {h.titleA} <span className="font-normal italic text-brass-300">{h.titleB}</span>
         </h1>
         <p className="fade-up mt-6 max-w-2xl text-[1.06rem] leading-relaxed text-paper/75">{h.body}</p>
         <div className="fade-up mt-8 flex flex-wrap gap-3">
@@ -95,7 +95,7 @@ function DashboardPreview() {
                 {f.money(Math.max(0, ev.profit), { decimals: 0 })} / {f.money(ev.profitTarget ?? 0, { decimals: 0 })}
               </span>
             </div>
-            <Meter className="mt-1.5" value={Math.max(0, ev.profit)} max={ev.profitTarget ?? 1} tone="copper" label={p.target} />
+            <Meter className="mt-1.5" value={Math.max(0, ev.profit)} max={ev.profitTarget ?? 1} tone="brass" label={p.target} />
           </div>
         </>
       )}
@@ -132,7 +132,7 @@ export function HomePage() {
             const Icon = icons[i];
             return (
               <article key={it.title} className="border-t-2 border-ink pt-5">
-                <Icon className="size-6 text-copper" aria-hidden />
+                <Icon className="size-6 text-brass-700" aria-hidden />
                 <h3 className="mt-4 font-display text-lg font-bold tracking-tight">{it.title}</h3>
                 <p className="mt-2 text-[0.95rem] leading-relaxed text-muted">{it.body}</p>
               </article>
@@ -147,9 +147,14 @@ export function HomePage() {
           <div className="mt-10">
             <ChallengeSelector />
           </div>
-          <Link href="/challenges" className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-petrol-700 hover:underline">
-            {s.selector.viewAll} <ArrowRight className="size-4" aria-hidden />
-          </Link>
+          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+            <Link href="/challenges" className="inline-flex items-center gap-1 text-sm font-medium text-navy-700 hover:underline">
+              {s.selector.viewAll} <ArrowRight className="size-4" aria-hidden />
+            </Link>
+            <Link href="/challenges#budget" className="inline-flex items-center gap-1 text-sm font-medium text-brass-700 hover:underline">
+              {s.budget.teaser} <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -159,7 +164,7 @@ export function HomePage() {
           {s.how.steps.map((st, i) => (
             <li key={st.title} className="relative">
               <div className="flex items-center gap-3">
-                <span className="num grid size-9 place-items-center rounded-full border-2 border-copper font-display text-sm font-bold text-copper-700">{i + 1}</span>
+                <span className="num grid size-9 place-items-center rounded-full border-2 border-brass font-display text-sm font-bold text-brass-700">{i + 1}</span>
                 {i < 3 && <span className="hidden h-px flex-1 border-t border-dashed border-line md:block" aria-hidden />}
               </div>
               <h3 className="mt-4 font-display text-base font-bold">{st.title}</h3>
@@ -249,7 +254,7 @@ export function HomePage() {
             <details key={it.q} className="group py-4">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display font-bold">
                 {it.q}
-                <span className="text-xl text-copper transition-transform group-open:rotate-45" aria-hidden>
+                <span className="text-xl text-brass-700 transition-transform group-open:rotate-45" aria-hidden>
                   +
                 </span>
               </summary>
@@ -259,11 +264,11 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="relative isolate overflow-hidden bg-petrol-800 text-paper">
+      <section className="relative isolate overflow-hidden bg-navy-800 text-paper">
         <Contours className="absolute inset-0 -z-10 h-full w-full text-paper" opacity={0.08} seed={5} />
         <div className="mx-auto flex max-w-[1320px] flex-col items-start gap-6 px-4 py-16 sm:px-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="font-display text-3xl font-extrabold tracking-tight">{s.cta.title}</h2>
+            <h2 className="font-serif text-[2.2rem] font-semibold">{s.cta.title}</h2>
             <p className="mt-2 text-paper/70">{s.cta.body}</p>
           </div>
           <div className="flex flex-wrap gap-3">

@@ -116,7 +116,7 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
     <div className="flex h-full min-h-0 flex-col">
       <div className="border-b border-line-2 px-4 py-3">
         <div className="flex flex-wrap items-center gap-2">
-          <Pill tone={serverMode === "llm" ? "petrol" : "warn"}>{modeLabel}</Pill>
+          <Pill tone={serverMode === "llm" ? "navy" : "warn"}>{modeLabel}</Pill>
           <span className="text-xs text-muted">{signedIn ? m.assistant.signedInAs : m.assistant.signedOut}</span>
         </div>
         <p className="mt-1.5 text-xs leading-relaxed text-muted">{modeNote}</p>
@@ -129,7 +129,7 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
             <p className="eyebrow mt-5 text-muted">{m.assistant.suggested}</p>
             <div className="mt-2 flex flex-col gap-2">
               {answerQuestion({ question: "", locale, kb, programs, ruleSets, context: null, now }).suggestions.map((s) => (
-                <button key={s} type="button" onClick={() => submit(s)} className="rounded-[10px] border border-line bg-white px-3 py-2 text-left text-sm text-ink transition-colors hover:border-petrol-600">
+                <button key={s} type="button" onClick={() => submit(s)} className="rounded-[10px] border border-line bg-white px-3 py-2 text-left text-sm text-ink transition-colors hover:border-navy-600">
                   {s}
                 </button>
               ))}
@@ -167,7 +167,7 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
               }
             }}
             placeholder={m.assistant.placeholder}
-            className="max-h-32 min-h-10 flex-1 resize-none rounded-[10px] border border-line bg-white px-3 py-2 text-sm focus:border-petrol-600 focus:outline-none focus:ring-2 focus:ring-petrol-600/20"
+            className="max-h-32 min-h-10 flex-1 resize-none rounded-[10px] border border-line bg-white px-3 py-2 text-sm focus:border-navy-600 focus:outline-none focus:ring-2 focus:ring-navy-600/20"
           />
           <Button type="submit" aria-label={m.assistant.send} className="h-10 w-10 px-0" disabled={!input.trim()}>
             <ArrowUp className="size-4" aria-hidden />
@@ -187,7 +187,7 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
     return (
       <div className="space-y-2">
         <div className="flex justify-end">
-          <p className="max-w-[85%] rounded-[12px] rounded-br-sm bg-petrol-800 px-3 py-2 text-sm text-paper">
+          <p className="max-w-[85%] rounded-[12px] rounded-br-sm bg-navy-800 px-3 py-2 text-sm text-paper">
             <span className="sr-only">{m.assistant.you}: </span>
             {turn.question}
           </p>
@@ -220,7 +220,7 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
                   </div>
                 )}
                 {answer.notes.length > 0 && (
-                  <ul className="mt-3 space-y-1 border-l-2 border-copper-300 pl-3 text-[0.8rem] text-graphite-2">
+                  <ul className="mt-3 space-y-1 border-l-2 border-brass-300 pl-3 text-[0.8rem] text-graphite-2">
                     {answer.notes.map((n, i) => (
                       <li key={i}>{n}</li>
                     ))}
@@ -235,8 +235,8 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
                       {answer.citations.map((c) => (
                         <li key={c.id}>
                           <Link href={c.href} className="group block rounded-md px-1 py-0.5 hover:bg-paper">
-                            <span className="block text-[0.7rem] font-medium text-copper-700">{c.label}</span>
-                            <span className="text-[0.82rem] text-petrol-700 underline decoration-petrol-700/30 underline-offset-2 group-hover:decoration-petrol-700">{c.title}</span>
+                            <span className="block text-[0.7rem] font-medium text-brass-700">{c.label}</span>
+                            <span className="text-[0.82rem] text-navy-700 underline decoration-navy-700/30 underline-offset-2 group-hover:decoration-navy-700">{c.title}</span>
                           </Link>
                         </li>
                       ))}
@@ -244,7 +244,7 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
                   </div>
                 )}
                 <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-line-2 pt-2 text-xs text-muted">
-                  <Pill tone={turn.mode === "llm" ? "petrol" : "neutral"} icon={false}>
+                  <Pill tone={turn.mode === "llm" ? "navy" : "neutral"} icon={false}>
                     {turn.mode === "llm" ? m.assistant.modeLlm : turn.mode === "offline" ? m.assistant.modeOffline : m.assistant.modeRules}
                   </Pill>
                   {turn.feedback ? (
@@ -274,7 +274,7 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
                   ) : actor ? (
                     <button
                       type="button"
-                      className={cx("inline-flex items-center gap-1 rounded px-1.5 py-0.5 hover:bg-paper-2 hover:text-ink", answer.escalate && "font-semibold text-copper-700")}
+                      className={cx("inline-flex items-center gap-1 rounded px-1.5 py-0.5 hover:bg-paper-2 hover:text-ink", answer.escalate && "font-semibold text-brass-700")}
                       onClick={() => {
                         const r = run((s, n) =>
                           createTicket(
@@ -307,7 +307,7 @@ export function AssistantChat({ compact = false }: { compact?: boolean }) {
                 {answer.suggestions.length > 0 && answer.refusal && (
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {answer.suggestions.slice(0, 2).map((s) => (
-                      <button key={s} type="button" onClick={() => onAsk(s)} className="rounded-full border border-line px-2.5 py-1 text-xs hover:border-petrol-600">
+                      <button key={s} type="button" onClick={() => onAsk(s)} className="rounded-full border border-line px-2.5 py-1 text-xs hover:border-navy-600">
                         {s}
                       </button>
                     ))}

@@ -36,6 +36,10 @@ export const checkout = section({
     openDashboard: "Open dashboard",
     viewInvoice: "View invoice (demo)",
     credentialsNote: "Platform credentials in the dashboard are placeholders — the platform connection is simulated.",
+    customTag: "Custom size",
+    customNote: "Priced through “What is your budget?”: standard curve + {premium}.",
+    changeCustom: "Change custom size",
+    promoReduced: "On custom sizes this code applies at {pct}.",
   },
   tr: {
     title: "Ödeme",
@@ -72,5 +76,9 @@ export const checkout = section({
     openDashboard: "Paneli aç",
     viewInvoice: "Faturayı görüntüle (demo)",
     credentialsNote: "Paneldeki platform giriş bilgileri yer tutucudur — platform bağlantısı simüledir.",
+    customTag: "Özel boyut",
+    customNote: "“What is your budget?” ile fiyatlandı: standart eğri + {premium}.",
+    changeCustom: "Özel boyutu değiştir",
+    promoReduced: "Özel boyutlarda bu kod {pct} oranında uygulanır.",
   },
 });

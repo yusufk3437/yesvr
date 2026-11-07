@@ -105,7 +105,7 @@ export function VerificationPage() {
                     <div className="mt-2 text-sm text-muted">
                       <p>{t(v.signed, { name: c.contract.signerName ?? "", date: f.dateTime(c.contract.signedAt ?? 0) })}</p>
                       {c.fundedAccountId && (
-                        <Link href={`/dashboard?account=${c.fundedAccountId}`} className="text-petrol-700 hover:underline">
+                        <Link href={`/dashboard?account=${c.fundedAccountId}`} className="text-navy-700 hover:underline">
                           {t(v.activated, { id: c.fundedAccountId })} →
                         </Link>
                       )}
@@ -242,7 +242,10 @@ function Invoice({ order }: { order: Order }) {
       <table className="num w-full">
         <tbody>
           <tr className="border-b border-line-2">
-            <td className="py-2">{o.line.replace("{program}", l(program.name)).replace("{size}", formatSize(order.size))}</td>
+            <td className="py-2">
+              {o.line.replace("{program}", l(program.name)).replace("{size}", formatSize(order.size))}
+              {order.custom && <span className="ml-1 text-xs text-brass-700">({m.checkout.customTag})</span>}
+            </td>
             <td className="py-2 text-right">{f.money(order.listPrice)}</td>
           </tr>
           {order.discount > 0 && (
@@ -289,9 +292,9 @@ export function NotificationsPage() {
         ) : (
           <ul className="divide-y divide-line-2">
             {items.map((x) => (
-              <li key={x.id} className={cx("flex flex-wrap items-center gap-3 px-5 py-3", !x.read && "bg-copper-100/30")}>
+              <li key={x.id} className={cx("flex flex-wrap items-center gap-3 px-5 py-3", !x.read && "bg-brass-100/30")}>
                 {!x.read && (
-                  <span className="size-2 rounded-full bg-copper" aria-label={n.unread} role="img" />
+                  <span className="size-2 rounded-full bg-brass" aria-label={n.unread} role="img" />
                 )}
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium">{text(x)}</p>
@@ -335,7 +338,7 @@ export function NotificationsPage() {
               <Monogram className="size-8" />
               <p>{mail.greeting}</p>
               <p className="leading-relaxed text-graphite">{mail.body}</p>
-              <span className="inline-block rounded-[8px] bg-petrol-800 px-4 py-2 text-paper">{m.emails.cta}</span>
+              <span className="inline-block rounded-[8px] bg-navy-800 px-4 py-2 text-paper">{m.emails.cta}</span>
               <p className="text-graphite">{m.emails.signoff}</p>
             </div>
             <p className="border-t border-line-2 bg-paper px-4 py-2 text-xs text-muted">{m.emails.footer}</p>
@@ -517,7 +520,7 @@ export function SupportPage() {
               {tk.source === "assistant" && <p className="border-b border-line-2 px-5 py-2 text-xs text-muted">{s.fromAssistant}</p>}
               <ul className="space-y-3 px-5 py-4">
                 {tk.messages.map((msg, i) => (
-                  <li key={i} className={cx("rounded-[10px] px-3 py-2 text-sm", msg.from === "ops" ? "bg-petrol-100/60" : "bg-paper")}>
+                  <li key={i} className={cx("rounded-[10px] px-3 py-2 text-sm", msg.from === "ops" ? "bg-navy-100/60" : "bg-paper")}>
                     <p className="text-xs font-semibold text-muted">
                       {msg.from === "ops" ? s.ops : s.you} · {f.dateTime(msg.at)}
                     </p>

@@ -6,6 +6,7 @@
  */
 import {
   CONTRACT_VERSION,
+  DEFAULT_CUSTOM_SIZING,
   PAYOUT_METHODS,
   RESTRICTED_COUNTRIES,
   SYMBOLS,
@@ -29,6 +30,7 @@ import {
   validatePayoutRequest,
   type PayoutEligibility,
 } from "@/domain/payout";
+import { promoBpsFor, quoteSize } from "@/domain/pricing";
 import { tradeNet } from "@/domain/risk";
 import {
   DAY_MS,
@@ -312,18 +314,29 @@ export interface PurchaseInput {
 }
 
 export function quoteOrder(s: DemoState, programId: ProgramId, size: number, promoCode: string | undefined, now: number) {
-  const program = s.catalog.programs.find((p) => p.id === programId);
-  const option = program?.sizes.find((o) => o.size === size);
-  if (!program || !option) return fail("product_unavailable");
+  const stored = s.catalog.programs.find((p) => p.id === programId);
+  if (!stored) return fail("product_unavailable");
+  const program = withCustomSizing(stored);
+  const q = quoteSize(program, size);
+  if ("error" in q) return fail(q.error);
   let discount = 0;
   let promo = null;
+  let promoBps = 0;
   if (promoCode && promoCode.trim()) {
     const r = findPromo(promoCode, programId, isoDay(now), s.catalog.promos);
     if (!r.ok) return fail(r.error);
     promo = r.promo;
-    discount = applyBps(option.price, r.promo.bps);
+    promoBps = promoBpsFor(program, r.promo, q.custom);
+    discount = applyBps(q.price, promoBps);
   }
-  return ok({ program, listPrice: option.price, discount, total: option.price - discount, promo });
+  return ok({ program, listPrice: q.price, discount, total: q.price - discount, promo, promoBps, custom: q.custom, betterStandard: q.betterStandard });
+}
+
+/** Older stored catalogs (before custom sizing) get the default custom policy. */
+export function withCustomSizing<T extends { sizes: { size: number }[]; customSizing?: unknown }>(p: T): T & { customSizing: import("@/domain/types").CustomSizing } {
+  if (p.customSizing) return p as T & { customSizing: import("@/domain/types").CustomSizing };
+  const sizes = p.sizes.map((x) => x.size);
+  return { ...p, customSizing: { minSize: Math.min(...sizes), maxSize: Math.max(...sizes), ...DEFAULT_CUSTOM_SIZING } };
 }
 
 export function purchaseChallenge(
@@ -374,6 +387,7 @@ export function purchaseChallenge(
     discount,
     total,
     promoCode: q.value.promo?.code,
+    custom: q.value.custom || undefined,
     status: "paid_demo",
     createdAt: now,
     billing: { ...input.billing, name: input.billing.name.trim() },
@@ -383,7 +397,7 @@ export function purchaseChallenge(
   const account = makeAccount(s, challenge, 0, "ready", now, input.platform);
   s.cart = null;
   notify(s, user.id, "order_confirmed", { orderId, accountId: account.id, programId: program.id, size: String(input.size), total: String(total) }, now);
-  audit(s, actor, "order.created_demo", "order", orderId, now, undefined, { total, ruleSet: ruleSet.id });
+  audit(s, actor, "order.created_demo", "order", orderId, now, undefined, { total, ruleSet: ruleSet.id, custom: q.value.custom });
   return ok({ orderId, challengeId, accountId: account.id });
 }
 

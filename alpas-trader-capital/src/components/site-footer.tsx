@@ -38,7 +38,7 @@ export function SiteFooter() {
     },
   ];
   return (
-    <footer className="no-print relative overflow-hidden bg-petrol-950 text-paper/80">
+    <footer className="no-print relative overflow-hidden bg-navy-950 text-paper/80">
       <Contours className="absolute inset-0 h-full w-full text-paper" opacity={0.06} seed={31} />
       <div className="relative mx-auto max-w-[1320px] px-4 pb-10 pt-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
@@ -49,7 +49,7 @@ export function SiteFooter() {
           </div>
           {cols.map((c) => (
             <div key={c.title}>
-              <h2 className="eyebrow text-copper-300">{c.title}</h2>
+              <h2 className="eyebrow text-brass-300">{c.title}</h2>
               <ul className="mt-3 space-y-2 text-sm">
                 {c.links.map((l) => (
                   <li key={l.href}>

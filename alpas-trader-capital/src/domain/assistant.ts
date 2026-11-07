@@ -17,6 +17,7 @@ import { formatBps, formatMoney, formatSize } from "./money";
 import { diffRuleSets, type KnowledgeArticle, type Topic } from "./knowledge";
 import type { AccountStatus, ChallengeStatus, KycStatus, PhaseKind, Program, ProgramId, RuleSet } from "./types";
 import type { PayoutCheckId } from "./payout";
+import { quoteSize } from "./pricing";
 
 export interface AssistantAccountContext {
   id: string;
@@ -161,7 +162,7 @@ function detectPhase(q: string): PhaseKind | null {
   return null;
 }
 function detectSize(q: string): number | null {
-  const mm = q.match(/\b(10|25|50|100|200)\s?(k|bin)\b/) ?? q.match(/\b(10|25|50|100|200)[.,]?000\b/);
+  const mm = q.match(/\b(\d{1,3})\s?(k|bin)\b/) ?? q.match(/\b(\d{1,3})[.,]000\b/);
   return mm ? Number(mm[1]) * 1000 * 100 : null;
 }
 function detectVersion(q: string): string | null {
@@ -183,7 +184,8 @@ function classify(q: string): Intent {
     return "activation";
   if (has(q, "haber", "news", "nfp", "cpi", "fomc", "non-farm")) return "news";
   if (has(q, "hafta sonu", "haftasonu", "weekend")) return "weekend";
-  if (has(q, "fiyat", "price", "pricing", "cost", "ucret", "kac para", "kac dolar", "how much is", "how much does", "how much are")) return "price";
+  if (has(q, "fiyat", "price", "pricing", "cost", "ucret", "kac para", "kac dolar", "how much is", "how much does", "how much are", "budget", "butce", "custom size", "ozel boyut", "ozel buyukluk")) return "price";
+  if (detectSize(q) !== null && has(q, "ne kadar", "kaca", "how much")) return "price";
   return "lookup";
 }
 
@@ -226,6 +228,9 @@ const T = {
     actGeneric: "Here is how activation works:",
     priceLine: "{prog}: {list}.",
     priceOne: "{prog} {size}: {price} one-time evaluation fee. The account size is simulated capital, not withdrawable money.",
+    priceCustom: "{prog} {size} is not a standard plan. Through “What is your budget?” it is available as a custom size for a one-time fee of {price} (standard price curve + {premium}).",
+    priceBetter: "Tip: the standard {size} plan costs {price}.",
+    priceRange: "{prog} custom sizes run from {min} to {max} in steps of {step}.",
     kyc: { not_started: "not started", submitted: "submitted, awaiting review", verified: "verified", rejected: "rejected" },
     status: { breached: "closed after a breach", expired: "closed for inactivity", passed: "passed", under_review: "under review", review_rejected: "rejected at review", closed: "closed", pending_activation: "pending activation", ready: "ready", active: "active" },
     binding: { daily: "daily", max: "overall" },
@@ -271,6 +276,9 @@ const T = {
     actGeneric: "Aktivasyon şöyle işler:",
     priceLine: "{prog}: {list}.",
     priceOne: "{prog} {size}: tek seferlik değerlendirme ücreti {price}. Hesap büyüklüğü simüle sermayedir, çekilebilir para değildir.",
+    priceCustom: "{prog} {size} standart bir plan değil. “What is your budget?” ile özel boyut olarak {price} tek seferlik ücretle alınabilir (standart fiyat eğrisi + {premium}).",
+    priceBetter: "İpucu: standart {size} plan {price}.",
+    priceRange: "{prog} özel boyutları {min} ile {max} arasında, {step} adımlarla seçilebilir.",
     kyc: { not_started: "başlamadı", submitted: "gönderildi, inceleme bekliyor", verified: "doğrulandı", rejected: "reddedildi" },
     status: { breached: "bir ihlal sonrası kapandı", expired: "inactivity nedeniyle kapandı", passed: "geçti", under_review: "incelemede", review_rejected: "incelemede reddedildi", closed: "kapandı", pending_activation: "aktivasyon bekliyor", ready: "hazır", active: "aktif" },
     binding: { daily: "günlük", max: "toplam" },
@@ -598,12 +606,23 @@ export function answerQuestion(input: AssistantInput): AssistantAnswer {
 
     case "price": {
       const progs = program ? programs.filter((p) => p.id === program) : programs;
-      const paragraphs = progs.map((p) => {
+      const paragraphs: string[] = [];
+      let usedCustom = false;
+      for (const p of progs) {
         const opt = size ? p.sizes.find((s) => s.size === size) : null;
-        if (opt) return fmt(t.priceOne, { prog: p.name[locale], size: formatSize(opt.size), price: formatMoney(opt.price, locale, { decimals: 0 }) });
-        return fmt(t.priceLine, { prog: p.name[locale], list: p.sizes.map((s) => `${formatSize(s.size)} ${formatMoney(s.price, locale, { decimals: 0 })}`).join(" · ") });
-      });
-      return { ...base, intent, paragraphs, notes, citations: uniqCites([help("pricing"), help("simulated_capital")]) };
+        if (opt) paragraphs.push(fmt(t.priceOne, { prog: p.name[locale], size: formatSize(opt.size), price: formatMoney(opt.price, locale, { decimals: 0 }) }));
+        else if (size && p.customSizing) {
+          usedCustom = true;
+          const q = quoteSize(p, size);
+          const money0 = (c: number) => formatMoney(c, locale, { decimals: 0 });
+          if ("error" in q) paragraphs.push(fmt(t.priceRange, { prog: p.name[locale], min: money0(p.customSizing.minSize), max: money0(p.customSizing.maxSize), step: money0(p.customSizing.step) }));
+          else {
+            paragraphs.push(fmt(t.priceCustom, { prog: p.name[locale], size: formatSize(size), price: money0(q.price), premium: formatBps(p.customSizing.premiumBps, locale) }));
+            if (q.betterStandard) paragraphs.push(fmt(t.priceBetter, { size: formatSize(q.betterStandard.size), price: money0(q.betterStandard.price) }));
+          }
+        } else paragraphs.push(fmt(t.priceLine, { prog: p.name[locale], list: p.sizes.map((s) => `${formatSize(s.size)} ${formatMoney(s.price, locale, { decimals: 0 })}`).join(" · ") }));
+      }
+      return { ...base, intent, paragraphs, notes, citations: uniqCites([help("pricing"), usedCustom ? help("custom_size") : help("simulated_capital")]) };
     }
 
     default: {

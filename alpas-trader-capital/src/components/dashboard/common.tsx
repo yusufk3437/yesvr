@@ -9,7 +9,7 @@ import { getChallenge } from "@/services/state";
 import { Pill, type Tone } from "../ui";
 
 export const statusTone = (s: Account["status"]): Tone =>
-  s === "active" ? "gain" : s === "breached" || s === "expired" || s === "review_rejected" ? "loss" : s === "under_review" ? "warn" : s === "passed" ? "petrol" : "neutral";
+  s === "active" ? "gain" : s === "breached" || s === "expired" || s === "review_rejected" ? "loss" : s === "under_review" ? "warn" : s === "passed" ? "navy" : "neutral";
 
 export function PageTitle({ title, sub, action }: { title: string; sub?: string; action?: React.ReactNode }) {
   return (
@@ -37,7 +37,7 @@ export function AccountHeader({ account }: { account: Account }) {
     [h.stage, l(ch.ruleSnapshot.phases[account.phaseIndex].label)],
     [
       h.rules,
-      <Link key="r" href={`/rules?program=${account.programId}&stage=${account.kind}&version=${ch.ruleSnapshot.version}`} className="text-petrol-700 underline decoration-petrol-700/30 underline-offset-2">
+      <Link key="r" href={`/rules?program=${account.programId}&stage=${account.kind}&version=${ch.ruleSnapshot.version}`} className="text-navy-700 underline decoration-navy-700/30 underline-offset-2">
         v{ch.ruleSnapshot.version}
       </Link>,
     ],

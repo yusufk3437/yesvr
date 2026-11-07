@@ -166,7 +166,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "ascent",
     code: "ASC",
-    name: { en: "ALPAS Ascent", tr: "ALPAS Ascent" },
+    name: { en: "Ascent", tr: "Ascent" },
     model: { en: "Two-step evaluation", tr: "İki aşamalı değerlendirme" },
     steps: 2,
     tagline: {
@@ -187,11 +187,12 @@ export const PROGRAMS: Program[] = [
     ],
     currentRuleSetId: "ascent@1.1",
     platforms: ["mt5", "ctrader"],
+    customSizing: { minSize: usd(10_000), maxSize: usd(200_000), step: usd(5_000), premiumBps: 800, promoFactorBps: 7000 },
   },
   {
     id: "ridge",
     code: "RDG",
-    name: { en: "ALPAS Ridge", tr: "ALPAS Ridge" },
+    name: { en: "Ridge", tr: "Ridge" },
     model: { en: "One-step evaluation", tr: "Tek aşamalı değerlendirme" },
     steps: 1,
     tagline: {
@@ -211,6 +212,7 @@ export const PROGRAMS: Program[] = [
     ],
     currentRuleSetId: "ridge@1.0",
     platforms: ["mt5", "ctrader"],
+    customSizing: { minSize: usd(10_000), maxSize: usd(100_000), step: usd(5_000), premiumBps: 800, promoFactorBps: 7000 },
   },
 ];
 
@@ -220,7 +222,7 @@ export const PROMO_CODES: PromoCode[] = [
     bps: 1000,
     programIds: ["ascent"],
     validUntil: "2027-01-31",
-    label: { en: "Launch code: 10% off ALPAS Ascent", tr: "Lansman kodu: ALPAS Ascent'te %10 indirim" },
+    label: { en: "Launch code: 10% off Ascent", tr: "Lansman kodu: Ascent'te %10 indirim" },
   },
 ];
 
@@ -304,6 +306,9 @@ export function priceFor(programId: ProgramId, size: number, programs = PROGRAMS
   if (!option) throw new Error(`Size ${size} not offered for ${programId}`);
   return option.price;
 }
+
+/** Programmes stored before custom sizing existed get the default policy. */
+export const DEFAULT_CUSTOM_SIZING = { step: usd(5_000), premiumBps: 800, promoFactorBps: 7000 };
 
 export function findPromo(code: string, programId: ProgramId, today: string, promos = PROMO_CODES) {
   const promo = promos.find((p) => p.code === code.trim().toUpperCase());

@@ -6,27 +6,28 @@
   --font-serif: var(--font-newsreader), Georgia, serif;
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 
-  --color-ink: #15181b;
-  --color-graphite: #22272c;
-  --color-graphite-2: #2e353b;
-  --color-graphite-3: #475057;
-  --color-petrol-950: #071f24;
-  --color-petrol-900: #0a2a30;
-  --color-petrol-800: #0e3a42;
-  --color-petrol-700: #13505a;
-  --color-petrol-600: #1a6672;
-  --color-petrol-100: #dceae9;
-  --color-paper: #f3f0e8;
-  --color-paper-2: #ebe6da;
-  --color-card: #fbfaf6;
-  --color-line: #d8d1c3;
-  --color-line-2: #e6e0d4;
-  --color-muted: #5f6466;
-  --color-subtle: #868a89;
-  --color-copper: #b5653c;
-  --color-copper-700: #8f4b29;
-  --color-copper-300: #dba27e;
-  --color-copper-100: #f4e3d6;
+  --color-ink: #0e1726;
+  --color-graphite: #1d2531;
+  --color-graphite-2: #2b3442;
+  --color-graphite-3: #4a5464;
+  --color-navy-950: #08142a;
+  --color-navy-900: #0f2240;
+  --color-navy-800: #15305a;
+  --color-navy-700: #1d3f74;
+  --color-navy-600: #2a5594;
+  --color-navy-100: #e2e8f2;
+  --color-paper: #f4f2ed;
+  --color-paper-2: #ebe7de;
+  --color-card: #fcfbf8;
+  --color-line: #d6d0c3;
+  --color-line-2: #e5e0d5;
+  --color-muted: #5c6470;
+  --color-subtle: #868b93;
+  /* Brass: base for fills and accents on navy; -700 for text on light (5.5:1). */
+  --color-brass: #c4a064;
+  --color-brass-700: #7a5c2e;
+  --color-brass-300: #d8bf8f;
+  --color-brass-100: #f3ebda;
   --color-gain: #237a5f;
   --color-gain-100: #dcefe6;
   --color-loss: #a8323a;
@@ -37,13 +38,13 @@
   --color-info: #3f5f78;
   --color-info-100: #e0e9f0;
 
-  /* Chart series (validated: lightness band, chroma floor, CVD ΔE ≥ 15 on #fbfaf6). */
-  --color-series-1: #008aa6;
-  --color-series-2: #b8602c;
+  /* Chart series (validated: lightness band, chroma floor, CVD ΔE ≥ 24 on #fcfbf8). */
+  --color-series-1: #2563a8;
+  --color-series-2: #b8862f;
   /* P&L diverging poles (CVD ΔE 7.8 deutan → always paired with signed text). */
   --color-pos: #13917a;
   --color-neg: #d2454f;
-  --color-grid: #ebe6da;
+  --color-grid: #e9e5dc;
 
   --radius-card: 14px;
   --shadow-card: 0 1px 0 rgb(21 24 27 / 0.04), 0 8px 24px -16px rgb(21 24 27 / 0.18);
@@ -66,7 +67,7 @@ body {
 }
 
 ::selection {
-  background: var(--color-copper-100);
+  background: var(--color-brass-100);
   color: var(--color-ink);
 }
 
@@ -85,8 +86,9 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-copper);
+  outline: 2px solid var(--color-navy-600);
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgb(196 160 100 / 0.55);
   border-radius: 6px;
 }
 
@@ -162,7 +164,7 @@ body {
 }
 
 dialog::backdrop {
-  background: rgb(7 31 36 / 0.55);
+  background: rgb(8 20 42 / 0.6);
 }
 
 /* Print: invoices and receipts. */

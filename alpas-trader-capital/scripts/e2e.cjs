@@ -17,7 +17,7 @@ try {
 const BASE = process.env.BASE_URL || "http://localhost:3000";
 const OUT = process.env.E2E_OUT || path.join(__dirname, "..", "artifacts", "e2e");
 fs.mkdirSync(OUT, { recursive: true });
-const KEY = "alpas.demo.v4";
+const KEY = "alpas.demo.v5";
 let step = 0;
 const results = [];
 
@@ -52,10 +52,19 @@ function check(cond, label) {
   };
 
   try {
+    // 0. "What is your budget?" custom-size planner (no purchase).
+    await go("/challenges#budget");
+    await page.getByLabel("Simulated account size (USD)").fill("35000");
+    await page.getByText("$241").first().waitFor();
+    check(true, "budget planner: custom Ascent 35K priced at $241 (curve + 8%)");
+    await page.getByLabel("Simulated account size (USD)").fill("95000");
+    await page.getByRole("button", { name: /Choose standard 100K instead/ }).waitFor();
+    check(true, "budget planner suggests the cheaper standard 100K for a 95K request");
+
     // 1. Package selection on the challenges page.
     await go("/challenges");
     await page.getByRole("radio", { name: /10K/ }).first().click();
-    await page.getByRole("button", { name: /Continue with ALPAS Ascent 10K/ }).click();
+    await page.getByRole("button", { name: /Continue with Ascent 10K/ }).click();
     await page.waitForURL(/\/checkout/);
     await page.getByRole("heading", { name: "Confirm your challenge" }).waitFor();
     await shot("checkout-select");
@@ -236,5 +245,5 @@ function check(cond, label) {
   console.log(`\n${results.length - failed}/${results.length} checks passed`);
   if (relevantErrors.length) console.log(`Console errors (${relevantErrors.length}):\n` + [...new Set(relevantErrors)].slice(0, 8).join("\n"));
   await browser.close();
-  process.exit(failed || results.length < 20 ? 1 : 0);
+  process.exit(failed || results.length < 24 ? 1 : 0);
 })();

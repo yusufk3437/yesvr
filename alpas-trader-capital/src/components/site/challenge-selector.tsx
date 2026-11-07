@@ -54,7 +54,7 @@ export function ChallengeSelector({ variant = "home" }: { variant?: "home" | "pa
                 onClick={() => sel.setProgramId(p.id)}
                 className={cx(
                   "rounded-[12px] border p-3 text-left transition-colors",
-                  sel.programId === p.id ? "border-petrol-700 bg-petrol-100/60 ring-1 ring-petrol-700" : "border-line bg-white hover:border-graphite-3",
+                  sel.programId === p.id ? "border-navy-700 bg-navy-100/60 ring-1 ring-navy-700" : "border-line bg-white hover:border-graphite-3",
                 )}
               >
                 <span className="block font-display text-[0.98rem] font-bold">{l(p.name)}</span>
@@ -101,7 +101,7 @@ export function ChallengeSelector({ variant = "home" }: { variant?: "home" | "pa
           </div>
           <div className="bg-card p-3">
             <dt className="text-xs text-muted">{s.fee}</dt>
-            <dd className="num mt-1 font-display text-xl font-bold text-copper-700">{f.money(price, { decimals: 0 })}</dd>
+            <dd className="num mt-1 font-display text-xl font-bold text-brass-700">{f.money(price, { decimals: 0 })}</dd>
             <dd className="mt-1 text-[0.72rem] leading-snug text-muted">{s.feeNote}</dd>
           </div>
           <div className="bg-card p-3">
@@ -120,7 +120,7 @@ export function ChallengeSelector({ variant = "home" }: { variant?: "home" | "pa
       <div className="grid gap-4 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
         <div className="overflow-hidden rounded-[14px] border border-line-2 bg-card">
           <div className="border-b border-line-2 bg-paper-2/60 px-4 py-2.5">
-            <h3 className="eyebrow text-petrol-700">{s.evalStage}</h3>
+            <h3 className="eyebrow text-navy-700">{s.evalStage}</h3>
           </div>
           <table className="w-full text-sm">
             <caption className="sr-only">{s.evalStage}</caption>
@@ -154,9 +154,9 @@ export function ChallengeSelector({ variant = "home" }: { variant?: "home" | "pa
             </tbody>
           </table>
         </div>
-        <div className="overflow-hidden rounded-[14px] border border-petrol-700/30 bg-petrol-900 text-paper">
+        <div className="overflow-hidden rounded-[14px] border border-navy-700/30 bg-navy-900 text-paper">
           <div className="border-b border-paper/10 px-4 py-2.5">
-            <h3 className="eyebrow text-copper-300">{s.fundedStage}</h3>
+            <h3 className="eyebrow text-brass-300">{s.fundedStage}</h3>
           </div>
           <table className="w-full text-sm">
             <caption className="sr-only">{s.fundedStage}</caption>

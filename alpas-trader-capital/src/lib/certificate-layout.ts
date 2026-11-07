@@ -24,9 +24,9 @@ export type Op =
   | { k: "qr"; x: number; y: number; size: number; modules: boolean[][]; color: string };
 
 const THEMES = {
-  challenge_passed: { band: "#0e3a42", accent: "#b5653c", accentSoft: "#dba27e", reach: 2 },
-  funded_trader: { band: "#22272c", accent: "#2f8f73", accentSoft: "#8fd0bb", reach: 3 },
-  payout: { band: "#3a2717", accent: "#c98a4f", accentSoft: "#e9c39b", reach: 4 },
+  challenge_passed: { band: "#0f2240", accent: "#8e6c35", accentSoft: "#d8bf8f", reach: 2 },
+  funded_trader: { band: "#1d2531", accent: "#2a7f66", accentSoft: "#8fd0bb", reach: 3 },
+  payout: { band: "#12302a", accent: "#8a6a2c", accentSoft: "#e2c88f", reach: 4 },
 } as const;
 
 /** Rough advance widths (em) for fitting; both renderers use the same numbers. */
@@ -68,28 +68,30 @@ export function certificateLayout(cert: Certificate, ctx: CertificateContext): O
   // Left band with monogram and route stamp.
   ops.push({ k: "rect", x: 0, y: 0, w: BAND, h: H, fill: th.band });
   for (const d of contourPaths({ width: BAND, height: H, seed: seed ^ 0x9e3779b9, levels: 8, peaks: [{ x: BAND * 0.6, y: H * 0.7, r: 260 }] }))
-    ops.push({ k: "path", d, tx: 0, ty: 0, stroke: "#f3f0e8", sw: 0.5, opacity: 0.09 });
+    ops.push({ k: "path", d, tx: 0, ty: 0, stroke: "#f4f2ed", sw: 0.5, opacity: 0.09 });
   const mx = 40;
   const my = 46;
-  const ms = 1.35;
-  ops.push({ k: "path", d: roundedRect(47, 47, 11), tx: mx + 0.5 * ms, ty: my + 0.5 * ms, scale: ms, fill: "#f3f0e8" });
-  ops.push({ k: "path", d: MONOGRAM.legs, tx: mx, ty: my, scale: ms, stroke: th.band, sw: 4.2 });
-  ops.push({ k: "path", d: MONOGRAM.contour, tx: mx, ty: my, scale: ms, stroke: th.band, sw: 2.4 });
-  ops.push({ k: "circle", cx: mx + MONOGRAM.dot.cx * ms, cy: my + MONOGRAM.dot.cy * ms, r: MONOGRAM.dot.r * ms, fill: th.accent });
-  ops.push({ k: "text", x: mx, y: my + 48 * ms + 30, text: "ALPAS", font: "displayHeavy", size: 22, color: "#f3f0e8", tracking: 3.2 });
-  ops.push({ k: "text", x: mx, y: my + 48 * ms + 46, text: copy.brandLine, font: "display", size: 7.2, color: "#f3f0e8", tracking: 2.4, opacity: 0.7 });
+  const ms = 1.1;
+  const seal = MONOGRAM.seal;
+  ops.push({ k: "circle", cx: mx + seal.cx * ms, cy: my + seal.cy * ms, r: seal.r * ms, fill: "#f4f2ed" });
+  ops.push({ k: "circle", cx: mx + seal.cx * ms, cy: my + seal.cy * ms, r: MONOGRAM.ring.r * ms, stroke: th.accent, sw: MONOGRAM.ring.width * ms });
+  ops.push({ k: "path", d: MONOGRAM.summit, tx: mx, ty: my, scale: ms, fill: th.band });
+  ops.push({ k: "path", d: MONOGRAM.counter, tx: mx, ty: my, scale: ms, fill: "#f4f2ed" });
+  ops.push({ k: "path", d: MONOGRAM.diamond, tx: mx, ty: my, scale: ms, fill: th.accent });
+  ops.push({ k: "text", x: mx, y: my + 64 * ms + 30, text: "ALPAS", font: "serif", size: 23, color: "#f4f2ed", tracking: 3.6 });
+  ops.push({ k: "text", x: mx, y: my + 64 * ms + 46, text: copy.brandLine, font: "display", size: 7.2, color: "#f4f2ed", tracking: 2.4, opacity: 0.7 });
 
   // Route stamp: vertical waypoints, filled up to the certified stage.
   const stops = [copy.route.evaluation, copy.route.review, copy.route.funded, copy.route.payout];
   const top = 270;
   const gap = 68;
   const pts = stops.map((_, i) => ({ x: mx + 10 + (i % 2) * 22, y: top + i * gap }));
-  ops.push({ k: "path", d: openSpline(pts), tx: 0, ty: 0, stroke: "#f3f0e8", sw: 1, opacity: 0.35 });
+  ops.push({ k: "path", d: openSpline(pts), tx: 0, ty: 0, stroke: "#f4f2ed", sw: 1, opacity: 0.35 });
   ops.push({ k: "path", d: openSpline(pts, th.reach - 1), tx: 0, ty: 0, stroke: th.accentSoft, sw: 2.2 });
   stops.forEach((label, i) => {
     const reached = i < th.reach;
-    ops.push({ k: "circle", cx: pts[i].x, cy: pts[i].y, r: reached ? 6 : 4.5, fill: reached ? th.accentSoft : th.band, stroke: "#f3f0e8", sw: 1.4, opacity: reached ? 1 : 0.6 });
-    ops.push({ k: "text", x: pts[i].x + 16, y: pts[i].y + 3.5, text: label.toUpperCase(), font: "display", size: 8, color: "#f3f0e8", tracking: 1.4, opacity: reached ? 0.95 : 0.45 });
+    ops.push({ k: "circle", cx: pts[i].x, cy: pts[i].y, r: reached ? 6 : 4.5, fill: reached ? th.accentSoft : th.band, stroke: "#f4f2ed", sw: 1.4, opacity: reached ? 1 : 0.6 });
+    ops.push({ k: "text", x: pts[i].x + 16, y: pts[i].y + 3.5, text: label.toUpperCase(), font: "display", size: 8, color: "#f4f2ed", tracking: 1.4, opacity: reached ? 0.95 : 0.45 });
   });
   ops.push({ k: "text", x: mx, y: H - 40, text: copy.specimen, font: "display", size: 8, color: th.accentSoft, tracking: 2 });
 
@@ -97,7 +99,7 @@ export function certificateLayout(cert: Certificate, ctx: CertificateContext): O
   const cx = BAND + 54;
   const cw = W - BAND - 108;
   ops.push({ k: "text", x: cx, y: 82, text: copy.eyebrow[cert.type].toUpperCase(), font: "display", size: 8.5, color: th.accent, tracking: 2.2 });
-  ops.push({ k: "text", x: cx, y: 128, text: copy.title[cert.type], font: "displayHeavy", size: 40, color: ink, tracking: -0.6 });
+  ops.push({ k: "text", x: cx, y: 128, text: copy.title[cert.type], font: "serif", size: 42, color: ink });
   ops.push({ k: "rect", x: cx, y: 146, w: 56, h: 2.4, fill: th.accent });
   ops.push({ k: "text", x: cx, y: 184, text: copy.certifies, font: "sans", size: 11, color: muted });
   const nameSize = Math.min(38, cw / Math.max(1, cert.traderName.length * EM.serif));
@@ -146,17 +148,6 @@ export function certificateLayout(cert: Certificate, ctx: CertificateContext): O
   if (cert.status === "revoked")
     ops.push({ k: "text", x: BAND + (W - BAND) / 2, y: H / 2, text: copy.revoked, font: "displayHeavy", size: 70, color: "#a8323a", anchor: "middle", tracking: 8, opacity: 0.35, rotate: -18 });
   return ops;
-}
-
-/** Rounded rectangle as cubic Béziers (renders identically in SVG and pdf-lib). */
-function roundedRect(w: number, h: number, r: number) {
-  const k = r * 0.5523;
-  return [
-    `M${r} 0H${w - r}C${w - r + k} 0 ${w} ${r - k} ${w} ${r}`,
-    `V${h - r}C${w} ${h - r + k} ${w - r + k} ${h} ${w - r} ${h}`,
-    `H${r}C${r - k} ${h} 0 ${h - r + k} 0 ${h - r}`,
-    `V${r}C0 ${r - k} ${r - k} 0 ${r} 0Z`,
-  ].join("");
 }
 
 function wrap(text: string, font: FontKey, size: number, width: number): string[] {

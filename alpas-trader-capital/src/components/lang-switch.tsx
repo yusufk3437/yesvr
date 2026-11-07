@@ -19,7 +19,7 @@ export function LangSwitch({ tone = "dark", className }: { tone?: "dark" | "ligh
             locale === l
               ? tone === "dark"
                 ? "bg-ink text-paper"
-                : "bg-paper text-petrol-900"
+                : "bg-paper text-navy-900"
               : tone === "dark"
                 ? "text-muted hover:text-ink"
                 : "text-paper/70 hover:text-paper",

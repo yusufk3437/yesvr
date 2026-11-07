@@ -118,6 +118,15 @@ describe("ALPAS Assistant", () => {
     expect(a.paragraphs[0]).toContain("$339");
   });
 
+  it("quotes a custom size from the pricing engine and cites the custom-size article", () => {
+    const a = ask("Ascent 35K hesap ne kadar?");
+    expect(a.intent).toBe("price");
+    expect(a.paragraphs[0]).toContain("$241");
+    expect(a.citations.some((c) => c.id === "help/custom_size")).toBe(true);
+    const b = ask("What is your budget option for a 95K Ascent?", "en", null);
+    expect(b.paragraphs.join(" ")).toContain("standard 100K plan costs $479");
+  });
+
   it("does not use ready-only frozen accounts as live ones", () => {
     const a = ask(`${SCENARIO_ACCOUNTS.breached} bugün ne kadar daha kaybedebilirim?`);
     expect(a.usedAccountIds).toEqual([SCENARIO_ACCOUNTS.breached]);

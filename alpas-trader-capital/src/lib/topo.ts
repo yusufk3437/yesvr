@@ -96,9 +96,16 @@ export function routeGeometry(n: number, width: number, height: number, pad = 0.
   return { d: openSpline(points), points };
 }
 
+/**
+ * "Stepped summit" seal (64-unit box): a seal ring, an A-shaped summit whose
+ * left face climbs in three steps (Phase 1 → Phase 2 → Funded) and a brass
+ * diamond at the apex. Used by the web mark, the favicon and the certificates.
+ */
 export const MONOGRAM = {
-  viewBox: 48,
-  legs: "M12 38 L24 9.5 L36 38",
-  contour: "M15.8 29 C20.5 26.2 26.5 31.8 32.2 29",
-  dot: { cx: 24, cy: 20.5, r: 2.5 },
+  viewBox: 64,
+  seal: { cx: 32, cy: 32, r: 31 },
+  ring: { r: 27.2, width: 1.1 },
+  summit: "M15 47 V41 H20 V35 H25 V29 H28.6 L32 15 L49 47 Z",
+  counter: "M32 31.5 L26.8 47 H37.2 Z",
+  diamond: "M32 8.2 L34.5 11.2 L32 14.2 L29.5 11.2 Z",
 };

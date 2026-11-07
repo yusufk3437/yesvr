@@ -8,8 +8,8 @@ Tek kaynak: `src/domain/catalog.ts`. Site, checkout, dashboard, kural motoru ve 
 
 | Program | Kod | Model | Hesap büyüklükleri | Neden |
 |---|---|---|---|---|
-| **ALPAS Ascent** | ASC | İki aşama | 10K, 25K, 50K, 100K, 200K | Pazarın en anlaşılır modeli; daha geniş limitler, static toplam zarar. |
-| **ALPAS Ridge** | RDG | Tek aşama | 10K, 25K, 50K, 100K | Hızlı değerlendirme isteyenler için; daha sıkı ve trailing limit, consistency ile dengelenir. 200K yok: tek aşamada ilk dönemde riski sınırlamak için. |
+| **Ascent** | ASC | İki aşama | 10K, 25K, 50K, 100K, 200K | Pazarın en anlaşılır modeli; daha geniş limitler, static toplam zarar. |
+| **Ridge** | RDG | Tek aşama | 10K, 25K, 50K, 100K | Hızlı değerlendirme isteyenler için; daha sıkı ve trailing limit, consistency ile dengelenir. 200K yok: tek aşamada ilk dönemde riski sınırlamak için. |
 
 **Instant model eklenmedi.** Gerekçe: değerlendirme verisi olmadan fiyatlanması zor, ters seçim riski yüksek, kuralları (çok sıkı trailing + yüksek consistency) trader için anlaşılmaz hale geliyor. Gerçek değerlendirme verisi biriktikten sonra yeniden değerlendirilmeli.
 
@@ -25,6 +25,21 @@ Tek kaynak: `src/domain/catalog.ts`. Site, checkout, dashboard, kural motoru ve 
 
 - Liste fiyatı sabittir; kalıcı "üstü çizili" fiyat yoktur.
 - Kampanya yalnızca açık kodla uygulanır ve kodun yüzdesi, bitiş tarihi ve kapsamı checkout'ta gösterilir. Demo kod: `ASCENT10` (Ascent'te %10, katalogda bitiş tarihi tanımlı).
+- **Program adları:** Programlar marka ön eki olmadan **Ascent** ve **Ridge** olarak adlandırılır; marka logo, site ve sertifikalarda zaten görünür.
+
+### 2.1 "What is your budget?" — özel hesap büyüklüğü
+Standart planların arasında bir büyüklük isteyen trader, **istediği hesap büyüklüğünü** (ör. $35.000) ya da **ayırmak istediği ücreti** girer.
+
+| Konu | Karar |
+|---|---|
+| Aralık | Ascent $10K–$200K, Ridge $10K–$100K. Adım $5.000. |
+| Fiyat | Komşu standart planlar arasındaki doğrusal fiyat eğrisi **+ %8**, yukarı yuvarlanmış tam dolar. Örnek: Ascent 35K → eğri $223 → **$241**. |
+| Avantaj | Standart planların hacim avantajının biraz altında kalır (+%8 prim). |
+| Kampanya kodu | Özel boyutta kodun oranının **%70'i** uygulanır (`ASCENT10`: standartta %10, özelde %7). |
+| Daha iyi standart plan | Aynı veya daha büyük bir standart plan aynı/daha düşük ücretliyse açıkça önerilir (ör. özel 95K $497 → standart 100K $479). |
+| Kurallar | Standart planlarla aynı kural sürümü. Yüzde bazlı limitler ve payout tutarları hesap büyüklüğüyle orantılıdır. |
+| Ücret bütçesi modu | Girilen ücret bütçesine sığan en büyük plan (standart veya özel) bulunur. |
+
 - **Kavram ayrımı (her ekranda):** *Simüle hesap büyüklüğü* çekilebilir para değildir. *Katılım ücreti* değerlendirme hizmetinin bedelidir. *Performans ödülü* funded aşamada simüle kârdan hesaplanan, trader'a ödenebilen tutardır.
 
 ## 3. Kurallar (kural sürümleri: Ascent v1.1, Ridge v1.0)
@@ -42,7 +57,7 @@ Tek kaynak: `src/domain/catalog.ts`. Site, checkout, dashboard, kural motoru ve 
 | Inactivity | 30 ardışık takvim günü işlem açılmazsa hesap kapanır (23. günde uyarı). |
 | Süre sınırı | Yok. |
 
-### ALPAS Ascent — iki aşama
+### Ascent — iki aşama
 | | Aşama 1 | Aşama 2 | Funded |
 |---|---|---|---|
 | Kâr hedefi | %8 | %5 | — |
@@ -55,7 +70,7 @@ Tek kaynak: `src/domain/catalog.ts`. Site, checkout, dashboard, kural motoru ve 
 
 Aşama 1'i geçmek **funded hesap açmaz**; yeni bir Aşama 2 hesabı açılır. Aşama 2 hedefleri tamamlanınca hesap **incelemeye** alınır.
 
-### ALPAS Ridge — tek aşama
+### Ridge — tek aşama
 | | Değerlendirme | Funded |
 |---|---|---|
 | Kâr hedefi | %10 | — |

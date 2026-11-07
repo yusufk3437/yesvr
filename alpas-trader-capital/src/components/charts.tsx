@@ -130,7 +130,7 @@ export function EquityChart({ points, refs, height = 260, labels }: { points: Eq
             role="img"
             aria-label={`${labels.balance} / ${labels.equity}`}
             tabIndex={0}
-            className="block touch-none select-none outline-none focus-visible:ring-2 focus-visible:ring-copper"
+            className="block touch-none select-none outline-none focus-visible:ring-2 focus-visible:ring-brass"
             onPointerMove={(e) => {
               const r = (e.currentTarget as SVGSVGElement).getBoundingClientRect();
               setHover(nearest(e.clientX - r.left));

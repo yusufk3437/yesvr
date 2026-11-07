@@ -50,7 +50,7 @@ export function SiteHeader() {
               className={cx("rounded-md px-3 py-2 text-[0.9rem] font-medium transition-colors", path.startsWith(l.href) ? "text-ink" : "text-muted hover:text-ink")}
             >
               {l.label}
-              {path.startsWith(l.href) && <span className="mt-0.5 block h-0.5 rounded-full bg-copper" aria-hidden />}
+              {path.startsWith(l.href) && <span className="mt-0.5 block h-0.5 rounded-full bg-brass" aria-hidden />}
             </Link>
           ))}
         </nav>

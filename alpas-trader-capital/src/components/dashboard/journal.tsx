@@ -107,7 +107,7 @@ export function JournalPage() {
               <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed">{e.note}</p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {e.tags.map((t) => (
-                  <Pill key={t} tone="petrol" icon={false}>
+                  <Pill key={t} tone="navy" icon={false}>
                     #{t}
                   </Pill>
                 ))}

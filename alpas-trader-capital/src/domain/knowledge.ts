@@ -38,6 +38,7 @@ export type Topic =
   | "regions"
   | "certificates"
   | "pricing"
+  | "custom_size"
   | "simulated_capital"
   | "demo"
   | "faq";
@@ -467,6 +468,15 @@ function helpArticles(programs: Program[], ruleSets: RuleSet[]): KnowledgeArticl
         tr: `Tek seferlik değerlendirme ücretleri (USD). ${priceLine("tr")}. Kampanyalar yalnızca checkout'ta bitiş tarihiyle gösterilen açık bir kodla uygulanır.`,
       },
       ["price", "fiyat", "cost", "ücret", "fee", "how much", "kaç", "para", "usd", "dolar", "promo", "kampanya", "indirim", "discount"],
+    ),
+    add(
+      "custom_size",
+      { en: "What is your budget? Custom account sizes", tr: "What is your budget? Özel hesap büyüklükleri" },
+      {
+        en: `Besides the standard plans you can choose any simulated account size in between (${programs.map((pr) => `${pr.name.en} ${formatSize(pr.customSizing.minSize)}–${formatSize(pr.customSizing.maxSize)}`).join(", ")}, in steps of ${m(programs[0].customSizing.step, "en")}), or enter the fee you want to spend. The fee is taken from the standard price curve between the neighbouring plans plus ${p(programs[0].customSizing.premiumBps, "en")}, so the advantage stays slightly below the standard plans. Promotion codes apply at ${p(programs[0].customSizing.promoFactorBps, "en")} of their rate on custom sizes. Rules, limits (as percentages) and payouts are identical to the standard plans. If a larger standard plan costs the same or less, it is shown instead.`,
+        tr: `Standart planların yanı sıra aradaki herhangi bir simüle hesap büyüklüğünü seçebilirsiniz (${programs.map((pr) => `${pr.name.tr} ${formatSize(pr.customSizing.minSize)}–${formatSize(pr.customSizing.maxSize)}`).join(", ")}, ${m(programs[0].customSizing.step, "tr")} adımlarla). İsterseniz ayırmak istediğiniz ücreti de girebilirsiniz. Ücret, komşu planlar arasındaki standart fiyat eğrisinden alınır ve üzerine ${p(programs[0].customSizing.premiumBps, "tr")} eklenir. Böylece avantajı standart planların biraz altında kalır. Kampanya kodları özel boyutlarda kendi oranlarının ${p(programs[0].customSizing.promoFactorBps, "tr")} kadarıyla uygulanır. Kurallar, yüzde olarak limitler ve payout'lar standart planlarla aynıdır. Daha büyük bir standart plan aynı veya daha düşük ücretliyse o önerilir.`,
+      },
+      ["budget", "bütçe", "butce", "custom", "özel", "ozel", "size", "büyüklük", "between", "arasında", "35k", "any size", "istediğim"],
     ),
     add(
       "platform",

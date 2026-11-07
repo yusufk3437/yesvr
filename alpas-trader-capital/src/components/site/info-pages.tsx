@@ -35,7 +35,7 @@ export function PayoutPolicyPage() {
           <ol className="mt-6 grid gap-4 md:grid-cols-5">
             {steps.map((s, i) => (
               <li key={s} className="relative rounded-[14px] border border-line-2 bg-card p-4">
-                <span className="num font-display text-xs font-bold text-copper-700">{String(i + 1).padStart(2, "0")}</span>
+                <span className="num font-display text-xs font-bold text-brass-700">{String(i + 1).padStart(2, "0")}</span>
                 <p className="mt-1 font-display font-bold">{m.labels.payoutStatus[s]}</p>
                 <p className="mt-1 text-sm text-muted">{p.statuses[s]}</p>
               </li>
@@ -91,7 +91,7 @@ export function PayoutPolicyPage() {
               </h2>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 {items.map((a) => (
-                  <article key={a.id} id={a.anchor} className="scroll-mt-28 rounded-[14px] border border-line-2 bg-card p-5 target:ring-2 target:ring-copper/40">
+                  <article key={a.id} id={a.anchor} className="scroll-mt-28 rounded-[14px] border border-line-2 bg-card p-5 target:ring-2 target:ring-brass/40">
                     <h3 className="font-display font-bold">{a.title[locale]}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-graphite">{a.body[locale]}</p>
                     {a.example && <p className="num mt-2 rounded-md bg-paper px-3 py-2 text-sm">{a.example[locale]}</p>}
@@ -123,7 +123,7 @@ function OlderPayoutVersions() {
         {kb
           .filter((a) => a.category === "payout" && older.some((r) => r.id === a.ruleSetId))
           .map((a) => (
-            <article key={a.id} id={a.anchor} className="scroll-mt-28 rounded-[12px] border border-line-2 bg-card p-4 target:ring-2 target:ring-copper/40">
+            <article key={a.id} id={a.anchor} className="scroll-mt-28 rounded-[12px] border border-line-2 bg-card p-4 target:ring-2 target:ring-brass/40">
               <h3 className="font-display text-sm font-bold">
                 {a.title[locale]} · v{a.version}
               </h3>
@@ -157,7 +157,7 @@ export function ScalingPage() {
           <ul className="mt-4 space-y-3 text-[0.95rem]">
             {[t(s.cond1, { pct: f.bps(sc.minNetProfitBps), months: sc.reviewEveryMonths }), t(s.cond2, { n: sc.minPaidPayouts }), s.cond3].map((c, i) => (
               <li key={i} className="flex gap-3">
-                <span className="num font-display font-bold text-copper-700">{String(i + 1).padStart(2, "0")}</span>
+                <span className="num font-display font-bold text-brass-700">{String(i + 1).padStart(2, "0")}</span>
                 {c}
               </li>
             ))}
@@ -206,7 +206,7 @@ export function AboutPage() {
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {a.principles.map((p, i) => (
             <article key={p.title} className="flex gap-4 border-t-2 border-ink pt-4">
-              <span className="num font-display text-2xl font-extrabold text-copper">{i + 1}</span>
+              <span className="num font-display text-2xl font-extrabold text-brass-700">{i + 1}</span>
               <div>
                 <h3 className="font-display text-lg font-bold">{p.title}</h3>
                 <p className="mt-1 text-muted">{p.body}</p>
@@ -268,14 +268,14 @@ export function HelpPage() {
               </h2>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 {c.items.map((a) => (
-                  <details key={a.id} id={a.anchor} className="group scroll-mt-28 rounded-[14px] border border-line-2 bg-card p-4 open:shadow-[var(--shadow-card)] target:ring-2 target:ring-copper/40" open={!!nq || undefined}>
+                  <details key={a.id} id={a.anchor} className="group scroll-mt-28 rounded-[14px] border border-line-2 bg-card p-4 open:shadow-[var(--shadow-card)] target:ring-2 target:ring-brass/40" open={!!nq || undefined}>
                     <summary className="cursor-pointer list-none font-display font-bold">
                       {a.title[locale]}
                       {a.version && <span className="ml-2 text-xs font-normal text-subtle">v{a.version}</span>}
                     </summary>
                     <p className="mt-2 text-sm leading-relaxed text-graphite">{a.body[locale]}</p>
                     {a.category === "rule" && (
-                      <Link href={a.href} className="mt-2 inline-block text-xs text-petrol-700 hover:underline">
+                      <Link href={a.href} className="mt-2 inline-block text-xs text-navy-700 hover:underline">
                         {m.nav.rules} →
                       </Link>
                     )}
@@ -284,7 +284,7 @@ export function HelpPage() {
               </div>
             </section>
           ))}
-        <Link href="/contact" className="inline-block font-medium text-petrol-700 hover:underline">
+        <Link href="/contact" className="inline-block font-medium text-navy-700 hover:underline">
           {h.contact} →
         </Link>
       </div>

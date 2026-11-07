@@ -133,7 +133,7 @@ export function DemoToolsPage() {
                 ))}
               </div>
             </div>
-            <Link href={account ? `/dashboard?account=${account.id}` : "/dashboard"} className="inline-block text-sm text-petrol-700 hover:underline">
+            <Link href={account ? `/dashboard?account=${account.id}` : "/dashboard"} className="inline-block text-sm text-navy-700 hover:underline">
               {m.dash.nav.overview} →
             </Link>
           </div>
@@ -170,7 +170,7 @@ export function DemoToolsPage() {
           <ol className="space-y-2 p-5 text-sm">
             {d.flow.map((s, i) => (
               <li key={i} className="flex gap-2">
-                <CircleCheck className="mt-0.5 size-4 shrink-0 text-copper" aria-hidden />
+                <CircleCheck className="mt-0.5 size-4 shrink-0 text-brass-700" aria-hidden />
                 <span>
                   <span className="num mr-1 text-muted">{i + 1}.</span>
                   {s}

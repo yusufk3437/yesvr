@@ -13,12 +13,12 @@ type Size = "sm" | "md" | "lg";
 const btnBase =
   "inline-flex items-center justify-center gap-2 rounded-[10px] font-medium transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed select-none whitespace-nowrap";
 const btnVariant: Record<Variant, string> = {
-  primary: "bg-petrol-800 text-paper hover:bg-petrol-700 active:bg-petrol-900",
-  accent: "bg-copper text-white hover:bg-copper-700",
+  primary: "bg-navy-800 text-paper hover:bg-navy-700 active:bg-navy-900",
+  accent: "bg-brass text-navy-950 hover:bg-brass-300",
   outline: "border border-line bg-card text-ink hover:border-graphite-3 hover:bg-white",
   ghost: "text-ink hover:bg-paper-2",
   danger: "bg-loss text-white hover:brightness-110",
-  light: "bg-paper text-petrol-900 hover:bg-white",
+  light: "bg-paper text-navy-900 hover:bg-white",
 };
 const btnSize: Record<Size, string> = {
   sm: "h-8 px-3 text-[0.82rem]",
@@ -79,15 +79,15 @@ export function CardHeader({ title, sub, action, id }: { title: React.ReactNode;
 
 /* ───────────── Status ───────────── */
 
-export type Tone = "gain" | "loss" | "warn" | "info" | "neutral" | "accent" | "petrol";
+export type Tone = "gain" | "loss" | "warn" | "info" | "neutral" | "accent" | "navy";
 const toneCls: Record<Tone, string> = {
   gain: "bg-gain-100 text-gain border-gain/25",
   loss: "bg-loss-100 text-loss border-loss/25",
   warn: "bg-warn-100 text-warn border-warn-500/30",
   info: "bg-info-100 text-info border-info/25",
   neutral: "bg-paper-2 text-graphite-2 border-line",
-  accent: "bg-copper-100 text-copper-700 border-copper/25",
-  petrol: "bg-petrol-100 text-petrol-800 border-petrol-700/20",
+  accent: "bg-brass-100 text-brass-700 border-brass/25",
+  navy: "bg-navy-100 text-navy-800 border-navy-700/20",
 };
 const toneIcon: Record<Tone, React.ComponentType<{ className?: string; "aria-hidden"?: boolean }> | null> = {
   gain: CheckCircle2,
@@ -96,7 +96,7 @@ const toneIcon: Record<Tone, React.ComponentType<{ className?: string; "aria-hid
   info: CircleDashed,
   neutral: null,
   accent: null,
-  petrol: Info,
+  navy: Info,
 };
 
 export function Pill({ tone = "neutral", children, icon = true, className }: { tone?: Tone; children: React.ReactNode; icon?: boolean; className?: string }) {
@@ -112,9 +112,9 @@ export function Pill({ tone = "neutral", children, icon = true, className }: { t
 export const pnlTone = (v: number): Tone => (v > 0 ? "gain" : v < 0 ? "loss" : "neutral");
 export const pnlText = (v: number) => (v > 0 ? "text-gain" : v < 0 ? "text-loss" : "text-ink");
 
-export function Meter({ value, max, tone = "petrol", label, className }: { value: number; max: number; tone?: "petrol" | "gain" | "loss" | "warn" | "copper"; label: string; className?: string }) {
+export function Meter({ value, max, tone = "navy", label, className }: { value: number; max: number; tone?: "navy" | "gain" | "loss" | "warn" | "brass"; label: string; className?: string }) {
   const pct = max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
-  const bar = { petrol: "bg-petrol-700", gain: "bg-gain", loss: "bg-loss", warn: "bg-warn-500", copper: "bg-copper" }[tone];
+  const bar = { navy: "bg-navy-700", gain: "bg-gain", loss: "bg-loss", warn: "bg-warn-500", brass: "bg-brass" }[tone];
   return (
     <div className={cx("h-2 w-full overflow-hidden rounded-full bg-paper-2", className)} role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={Math.round(value)}>
       <div className={cx("h-full rounded-full transition-[width] duration-500", bar)} style={{ width: `${pct}%` }} />
@@ -153,7 +153,7 @@ export function Field({ label, hint, error, children, htmlFor, optional }: { lab
 }
 
 const inputCls =
-  "w-full rounded-[10px] border border-line bg-white px-3 py-2 text-[0.94rem] text-ink placeholder:text-subtle focus:border-petrol-600 focus:outline-none focus:ring-2 focus:ring-petrol-600/20 aria-[invalid=true]:border-loss";
+  "w-full rounded-[10px] border border-line bg-white px-3 py-2 text-[0.94rem] text-ink placeholder:text-subtle focus:border-navy-600 focus:outline-none focus:ring-2 focus:ring-navy-600/20 aria-[invalid=true]:border-loss";
 
 export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={cx(inputCls, "h-10", props.className)} />;
@@ -167,7 +167,7 @@ export function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
 export function Checkbox({ label, id, ...props }: { label: React.ReactNode; id: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label htmlFor={id} className="flex cursor-pointer items-start gap-2.5 text-sm text-graphite">
-      <input id={id} type="checkbox" className="mt-0.5 size-4 shrink-0 accent-petrol-700" {...props} />
+      <input id={id} type="checkbox" className="mt-0.5 size-4 shrink-0 accent-navy-700" {...props} />
       <span>{label}</span>
     </label>
   );
@@ -381,8 +381,8 @@ export const td = "border-b border-line-2 px-4 py-2.5 align-middle";
 export function SectionTitle({ eyebrow, title, intro, align = "left", tone = "dark" }: { eyebrow?: string; title: React.ReactNode; intro?: React.ReactNode; align?: "left" | "center"; tone?: "dark" | "light" }) {
   return (
     <div className={cx("max-w-2xl", align === "center" && "mx-auto text-center")}>
-      {eyebrow && <p className={cx("eyebrow", tone === "light" ? "text-copper-300" : "text-copper")}>{eyebrow}</p>}
-      <h2 className={cx("mt-2 font-display text-[1.9rem] font-extrabold leading-[1.08] tracking-[-0.02em] sm:text-[2.35rem]", tone === "light" ? "text-paper" : "text-ink")}>{title}</h2>
+      {eyebrow && <p className={cx("eyebrow", tone === "light" ? "text-brass-300" : "text-brass-700")}>{eyebrow}</p>}
+      <h2 className={cx("mt-2 font-serif text-[2rem] font-semibold leading-[1.1] tracking-[-0.01em] sm:text-[2.5rem]", tone === "light" ? "text-paper" : "text-ink")}>{title}</h2>
       {intro && <p className={cx("mt-4 text-[1.02rem] leading-relaxed", tone === "light" ? "text-paper/75" : "text-muted")}>{intro}</p>}
     </div>
   );

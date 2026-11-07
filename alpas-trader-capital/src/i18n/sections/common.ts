@@ -403,6 +403,10 @@ export const errors = section({
     title_required: "Enter a title in both languages.",
     body_required: "Enter content in both languages (20+ characters).",
     network: "The service could not be reached. Showing the offline rule-based answer.",
+    size_below_min: "This account size is below the programme minimum.",
+    size_above_max: "This account size is above the programme maximum.",
+    size_step: "Choose the account size in steps of $5,000.",
+    size_invalid: "Enter a valid account size.",
   },
   tr: {
     generic: "İşlem tamamlanamadı.",
@@ -453,5 +457,9 @@ export const errors = section({
     title_required: "İki dilde başlık girin.",
     body_required: "İki dilde içerik girin (20+ karakter).",
     network: "Servise ulaşılamadı. Çevrimdışı kural tabanlı yanıt gösteriliyor.",
+    size_below_min: "Bu hesap büyüklüğü programın alt sınırının altında.",
+    size_above_max: "Bu hesap büyüklüğü programın üst sınırının üzerinde.",
+    size_step: "Hesap büyüklüğünü $5.000 adımlarla seçin.",
+    size_invalid: "Geçerli bir hesap büyüklüğü girin.",
   },
 });

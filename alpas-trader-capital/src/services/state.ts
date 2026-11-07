@@ -22,7 +22,7 @@ import type {
   User,
 } from "@/domain/types";
 
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 5;
 
 export interface CartSelection {
   programId: ProgramId;

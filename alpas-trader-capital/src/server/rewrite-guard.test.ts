@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { validateRewrite, type RewriteDraft } from "./rewrite-guard";
 
 const draft: RewriteDraft = {
-  paragraphs: ["ATC-104377 · ALPAS Ascent 100K: you can lose $5,000.00 more today before equity reaches the daily floor of $99,298.50."],
+  paragraphs: ["ATC-104377 · Ascent 100K: you can lose $5,000.00 more today before equity reaches the daily floor of $99,298.50."],
   facts: [{ label: "Daily room", value: "$5,000.00" }],
   notes: ["Touching a floor counts as a breach."],
   sources: [{ id: "ascent@1.1/phase1/daily_loss", title: "Daily loss limit", body: "5% of the initial account size" }],

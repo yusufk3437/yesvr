@@ -172,7 +172,7 @@ export function TradesPage() {
               {rows.map((x) => (
                 <tr key={x.id} className="cursor-pointer hover:bg-paper" onClick={() => setDetail(x)}>
                   <td className={`${td} num`}>
-                    <button type="button" className="text-petrol-700 underline decoration-petrol-700/30 underline-offset-2" onClick={() => setDetail(x)}>
+                    <button type="button" className="text-navy-700 underline decoration-navy-700/30 underline-offset-2" onClick={() => setDetail(x)}>
                       {x.id}
                     </button>
                   </td>
@@ -235,7 +235,7 @@ function TradeDetail({ trade }: { trade: Trade }) {
       </dl>
       {trade.newsWindow && <p className="mt-3 text-sm text-warn">{tr.newsFlag}</p>}
       <p className="mt-3 text-xs text-muted">{tr.simulated}</p>
-      <Link href="/rules" className="mt-2 inline-block text-xs text-petrol-700 hover:underline">
+      <Link href="/rules" className="mt-2 inline-block text-xs text-navy-700 hover:underline">
         {m.nav.rules} →
       </Link>
     </div>

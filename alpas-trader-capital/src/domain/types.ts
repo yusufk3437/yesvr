@@ -81,6 +81,20 @@ export interface SizeOption {
   price: Cents;
 }
 
+/**
+ * "What is your budget?" — sizes outside the standard list. Priced from the
+ * standard price curve with a smaller advantage than the standard plans.
+ */
+export interface CustomSizing {
+  minSize: Cents;
+  maxSize: Cents;
+  step: Cents;
+  /** Mark-up on the interpolated standard curve (800 = +8 %). */
+  premiumBps: number;
+  /** Share of a promotion's rate applied to custom sizes (7000 = 70 %). */
+  promoFactorBps: number;
+}
+
 export interface Program {
   id: ProgramId;
   code: "ASC" | "RDG";
@@ -93,6 +107,7 @@ export interface Program {
   sizes: SizeOption[];
   currentRuleSetId: string;
   platforms: PlatformId[];
+  customSizing: CustomSizing;
 }
 
 export interface PromoCode {
@@ -259,6 +274,8 @@ export interface Order {
   discount: Cents;
   total: Cents;
   promoCode?: string;
+  /** True when bought through "What is your budget?" (non-standard size). */
+  custom?: boolean;
   status: "paid_demo" | "refunded_demo";
   createdAt: number;
   billing: { name: string; country: string; city?: string; address?: string };

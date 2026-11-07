@@ -51,7 +51,7 @@ export function CheckoutPage() {
     setBilling((b) => ({ ...b, name: b.name || (user.kyc.legalName ?? user.name), country: user.country }));
   }
 
-  if (!ready || !state?.cart && !done) return <LoadingBlock label={m.common.loading} rows={6} />;
+  if (!ready || (!state?.cart && !done)) return <LoadingBlock label={m.common.loading} rows={6} />;
 
   if (done)
     return (
@@ -83,7 +83,9 @@ export function CheckoutPage() {
   const quote = q.ok ? q.value : null;
   const restricted = RESTRICTED_COUNTRIES.includes(billing.country);
   const steps = [c.steps.select, c.steps.account, c.steps.billing, c.steps.review];
-  const canNext = [true, !!user, billing.name.trim().length >= 2 && !restricted, true][step];
+  const sizeError = !q.ok && q.error.startsWith("size_") ? (m.errors[q.error as keyof typeof m.errors] ?? m.errors.generic) : null;
+  const isCustom = !program.sizes.some((o) => o.size === cart.size);
+  const canNext = [!sizeError, !!user, billing.name.trim().length >= 2 && !restricted, true][step] && !sizeError;
 
   const confirm = () => {
     setError(null);
@@ -106,14 +108,14 @@ export function CheckoutPage() {
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6">
-      <h1 className="font-display text-3xl font-extrabold tracking-tight">{c.title}</h1>
+      <h1 className="font-serif text-[2.2rem] font-semibold">{c.title}</h1>
       <Notice tone="warn" className="mt-4">
         {c.demoNotice}
       </Notice>
       <ol className="mt-6 grid grid-cols-4 gap-2" aria-label={c.title}>
         {steps.map((s, i) => (
           <li key={s} aria-current={i === step ? "step" : undefined} className="min-w-0">
-            <div className={cx("h-1 rounded-full", i <= step ? "bg-copper" : "bg-line")} />
+            <div className={cx("h-1 rounded-full", i <= step ? "bg-brass" : "bg-line")} />
             <p className={cx("mt-2 truncate text-xs font-medium sm:text-sm", i === step ? "text-ink" : "text-muted")}>
               <span className="num mr-1">{i + 1}.</span>
               {s}
@@ -133,7 +135,8 @@ export function CheckoutPage() {
                   value={cart.programId}
                   onChange={(v) => {
                     const p = programs.find((x) => x.id === v)!;
-                    const size = p.sizes.some((s) => s.size === cart.size) ? cart.size : p.sizes[0].size;
+                    const fits = p.sizes.some((s) => s.size === cart.size) || (cart.size >= p.customSizing.minSize && cart.size <= p.customSizing.maxSize && cart.size % p.customSizing.step === 0);
+                    const size = fits ? cart.size : p.sizes[0].size;
                     run((s) => setCart(s, { ...cart, programId: v, size }));
                     setPromo(undefined);
                   }}
@@ -156,7 +159,21 @@ export function CheckoutPage() {
                       {formatSize(o.size)} · {f.money(o.price, { decimals: 0 })}
                     </button>
                   ))}
+                  {isCustom && (
+                    <button type="button" role="radio" aria-checked className="num h-10 rounded-[10px] border border-brass bg-brass-100 px-3 font-display text-sm font-bold text-brass-700">
+                      {formatSize(cart.size)}
+                      {quote ? ` · ${f.money(quote.listPrice, { decimals: 0 })}` : ""} · {c.customTag}
+                    </button>
+                  )}
                 </div>
+                {sizeError && (
+                  <Notice tone="loss" className="mt-3">
+                    {sizeError}
+                  </Notice>
+                )}
+                <Link href="/challenges#budget" className="mt-2 inline-block text-sm text-brass-700 hover:underline">
+                  {isCustom ? c.changeCustom : m.site.budget.teaser} →
+                </Link>
               </div>
               <div>
                 <p className="mb-2 text-sm font-medium">{m.site.challenges.platform}</p>
@@ -210,8 +227,8 @@ export function CheckoutPage() {
                 <legend className="mb-2 text-sm font-medium">{c.paymentTitle}</legend>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {(["card_demo", "bank_demo"] as const).map((p) => (
-                    <label key={p} className={cx("flex cursor-pointer items-center gap-3 rounded-[12px] border p-3 text-sm", payment === p ? "border-petrol-700 bg-petrol-100/50" : "border-line bg-white")}>
-                      <input type="radio" name="pay" className="accent-petrol-700" checked={payment === p} onChange={() => setPayment(p)} />
+                    <label key={p} className={cx("flex cursor-pointer items-center gap-3 rounded-[12px] border p-3 text-sm", payment === p ? "border-navy-700 bg-navy-100/50" : "border-line bg-white")}>
+                      <input type="radio" name="pay" className="accent-navy-700" checked={payment === p} onChange={() => setPayment(p)} />
                       {p === "card_demo" ? c.payCard : c.payBank}
                     </label>
                   ))}
@@ -273,6 +290,11 @@ export function CheckoutPage() {
           <Card className="sticky top-24 p-5">
             <p className="eyebrow text-muted">{m.site.challenges.summary}</p>
             <p className="mt-2 font-display text-lg font-bold">{t(c.lineChallenge, { program: l(program.name), size: formatSize(cart.size) })}</p>
+            {quote?.custom && (
+              <p className="mt-1 text-xs text-brass-700">
+                {c.customTag} · {t(c.customNote, { premium: f.bps(program.customSizing.premiumBps) })}
+              </p>
+            )}
             <p className="text-sm text-muted">
               {l(program.model)} · {m.labels.platform[cart.platform]}
             </p>
@@ -285,11 +307,12 @@ export function CheckoutPage() {
                 {quote.discount > 0 && (
                   <div className="flex justify-between py-2 text-gain">
                     <dt>
-                      {c.discount} ({quote.promo?.code})
+                      {c.discount} ({quote.promo?.code} · {f.bps(quote.promoBps)})
                     </dt>
                     <dd>−{f.money(quote.discount)}</dd>
                   </div>
                 )}
+                {quote.custom && quote.promo && <p className="pb-2 text-xs text-muted">{t(c.promoReduced, { pct: f.bps(quote.promoBps) })}</p>}
                 <div className="flex justify-between py-2 text-base font-semibold">
                   <dt>{c.total}</dt>
                   <dd>{f.money(quote.total)}</dd>
@@ -298,7 +321,7 @@ export function CheckoutPage() {
             )}
             <p className="mt-3 text-xs text-muted">{m.site.selector.sizeNote}</p>
             <p className="mt-1 text-xs text-muted">{t(c.ruleLock, { v: rs.version })}</p>
-            <Link href={`/rules?program=${cart.programId}&version=${rs.version}`} className="mt-3 inline-block text-xs text-petrol-700 hover:underline">
+            <Link href={`/rules?program=${cart.programId}&version=${rs.version}`} className="mt-3 inline-block text-xs text-navy-700 hover:underline">
               {m.nav.rules} →
             </Link>
           </Card>
@@ -318,7 +341,7 @@ export function CheckoutPage() {
         </p>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           <dl className="space-y-1 text-sm">
-            <p className="eyebrow text-petrol-700">{m.site.selector.evalStage}</p>
+            <p className="eyebrow text-navy-700">{m.site.selector.evalStage}</p>
             {ev.map((r) => (
               <div key={r.key} className="flex justify-between gap-3">
                 <dt className="text-muted">{r.label}</dt>
@@ -327,7 +350,7 @@ export function CheckoutPage() {
             ))}
           </dl>
           <dl className="space-y-1 text-sm">
-            <p className="eyebrow text-petrol-700">{m.site.selector.fundedStage}</p>
+            <p className="eyebrow text-navy-700">{m.site.selector.fundedStage}</p>
             {fu.map((r) => (
               <div key={r.key} className="flex justify-between gap-3">
                 <dt className="text-muted">{r.label}</dt>

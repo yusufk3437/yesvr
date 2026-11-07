@@ -95,9 +95,9 @@ export function OverviewPage() {
   }
 
   const stops = routeStops(account, ch.status, state.accounts, m, l, ch.ruleSnapshot.phases);
-  const dailyTone = ev.dailyUsed / ev.dailyLossAmount > 0.8 ? "loss" : ev.dailyUsed / ev.dailyLossAmount > 0.5 ? "warn" : "petrol";
+  const dailyTone = ev.dailyUsed / ev.dailyLossAmount > 0.8 ? "loss" : ev.dailyUsed / ev.dailyLossAmount > 0.5 ? "warn" : "navy";
   const maxUsed = Math.max(0, ev.maxLossAmount - ev.maxRemaining);
-  const maxTone = maxUsed / ev.maxLossAmount > 0.8 ? "loss" : maxUsed / ev.maxLossAmount > 0.5 ? "warn" : "petrol";
+  const maxTone = maxUsed / ev.maxLossAmount > 0.8 ? "loss" : maxUsed / ev.maxLossAmount > 0.5 ? "warn" : "navy";
   const monthKey = (ev.days.length ? ev.days[ev.days.length - 1].key : ev.dayKey).slice(0, 7) + "-01";
 
   return (
@@ -132,7 +132,7 @@ export function OverviewPage() {
         {ev.profitTarget !== null ? (
           <Card className="p-4">
             <Stat label={mt.target} value={f.money(Math.max(0, ev.profit))} sub={t(mt.reached, { value: f.ratio(Math.max(0, ev.profit) / ev.profitTarget, 0), target: f.money(ev.profitTarget, { decimals: 0 }) })} />
-            <Meter className="mt-3" value={Math.max(0, ev.profit)} max={ev.profitTarget} tone="copper" label={mt.target} />
+            <Meter className="mt-3" value={Math.max(0, ev.profit)} max={ev.profitTarget} tone="brass" label={mt.target} />
           </Card>
         ) : (
           <Card className="p-4">

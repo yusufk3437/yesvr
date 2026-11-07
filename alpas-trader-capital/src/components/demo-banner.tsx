@@ -14,7 +14,7 @@ export function DemoBanner() {
   return (
     <div className="no-print relative z-40 bg-ink text-paper/85">
       <div className="mx-auto flex max-w-[1320px] flex-wrap items-center gap-x-4 gap-y-1 px-4 py-1.5 text-[0.76rem] sm:px-6">
-        <span className="inline-flex items-center gap-1.5 font-display text-[0.68rem] font-bold uppercase tracking-[0.14em] text-copper-300">
+        <span className="inline-flex items-center gap-1.5 font-display text-[0.68rem] font-bold uppercase tracking-[0.14em] text-brass-300">
           <FlaskConical className="size-3.5" aria-hidden /> {m.common.demo}
         </span>
         <span className="order-last min-w-0 basis-full leading-snug sm:order-none sm:basis-0 sm:flex-1">{m.demo.banner}</span>
