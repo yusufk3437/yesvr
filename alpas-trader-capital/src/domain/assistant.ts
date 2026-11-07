@@ -12,7 +12,7 @@
  *  - If nothing in the published sources answers the question, it says so.
  */
 import { addBusinessDays, formatInZone } from "./time";
-import { fmt, type L10n, type Locale } from "./l10n";
+import { fmt, type Locale } from "./l10n";
 import { formatBps, formatMoney, formatSize } from "./money";
 import { diffRuleSets, type KnowledgeArticle, type Topic } from "./knowledge";
 import type { AccountStatus, ChallengeStatus, KycStatus, PhaseKind, Program, ProgramId, RuleSet } from "./types";
@@ -285,7 +285,7 @@ const T = {
 /* ───────────── engine ───────────── */
 
 export function answerQuestion(input: AssistantInput): AssistantAnswer {
-  const { locale, kb, programs, ruleSets, context, now } = input;
+  const { locale, kb, programs, ruleSets, context } = input;
   const t = T[locale];
   const raw = input.question.slice(0, MAX_QUESTION_LENGTH).replace(/[\u0000-\u001f\u007f]/g, " ");
   const q = normalize(raw);

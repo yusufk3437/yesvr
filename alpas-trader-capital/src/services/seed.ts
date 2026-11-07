@@ -240,7 +240,6 @@ export function createSeedState(realNow: number): DemoState {
   const K0 = tradingDayKey(anchor, TZ, RH);
   const todayStart = tradingDayStart(K0, TZ, RH);
   const keys = previousTradingDayKeys(K0, 72); // oldest first, keys[71] = previous trading day
-  const back = (n: number) => keys[keys.length - n]; // back(1) = yesterday's session
 
   const defne = b.user(DEMO_USERS.defne, "TR", tradingDayStart(keys[0], TZ, RH) - 20 * DAY_MS, "Defne Yıldırım");
   const jonah = b.user(DEMO_USERS.jonah, "PH", tradingDayStart(keys[0], TZ, RH) - 40 * DAY_MS, "Jonah Reyes");

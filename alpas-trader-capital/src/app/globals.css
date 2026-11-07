@@ -1,26 +1,176 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), var(--font-plex), ui-sans-serif, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --color-ink: #15181b;
+  --color-graphite: #22272c;
+  --color-graphite-2: #2e353b;
+  --color-graphite-3: #475057;
+  --color-petrol-950: #071f24;
+  --color-petrol-900: #0a2a30;
+  --color-petrol-800: #0e3a42;
+  --color-petrol-700: #13505a;
+  --color-petrol-600: #1a6672;
+  --color-petrol-100: #dceae9;
+  --color-paper: #f3f0e8;
+  --color-paper-2: #ebe6da;
+  --color-card: #fbfaf6;
+  --color-line: #d8d1c3;
+  --color-line-2: #e6e0d4;
+  --color-muted: #5f6466;
+  --color-subtle: #868a89;
+  --color-copper: #b5653c;
+  --color-copper-700: #8f4b29;
+  --color-copper-300: #dba27e;
+  --color-copper-100: #f4e3d6;
+  --color-gain: #237a5f;
+  --color-gain-100: #dcefe6;
+  --color-loss: #a8323a;
+  --color-loss-100: #f6e0df;
+  --color-warn: #8a6410;
+  --color-warn-500: #c18f1f;
+  --color-warn-100: #f5ebcf;
+  --color-info: #3f5f78;
+  --color-info-100: #e0e9f0;
+
+  /* Chart series (validated: lightness band, chroma floor, CVD ΔE ≥ 15 on #fbfaf6). */
+  --color-series-1: #008aa6;
+  --color-series-2: #b8602c;
+  /* P&L diverging poles (CVD ΔE 7.8 deutan → always paired with signed text). */
+  --color-pos: #13917a;
+  --color-neg: #d2454f;
+  --color-grid: #ebe6da;
+
+  --radius-card: 14px;
+  --shadow-card: 0 1px 0 rgb(21 24 27 / 0.04), 0 8px 24px -16px rgb(21 24 27 / 0.18);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "kern" 1;
+}
+
+::selection {
+  background: var(--color-copper-100);
+  color: var(--color-ink);
+}
+
+/* Tabular, aligned numerals for every financial value. */
+.num {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-copper);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Route drawing used in hero, stage diagrams and dashboard progress. */
+@keyframes route-draw {
+  from {
+    stroke-dashoffset: var(--route-length, 1200);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.route-draw {
+  stroke-dasharray: var(--route-length, 1200);
+  animation: route-draw 2.2s cubic-bezier(0.6, 0.1, 0.2, 1) 0.2s both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+@keyframes pulse-ring {
+  0% {
+    r: 7;
+    opacity: 0.7;
+  }
+  100% {
+    r: 16;
+    opacity: 0;
+  }
+}
+.pulse-ring {
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .route-draw {
+    stroke-dasharray: none;
+  }
+  .pulse-ring {
+    display: none;
+  }
+}
+
+dialog::backdrop {
+  background: rgb(7 31 36 / 0.55);
+}
+
+/* Print: invoices and receipts. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
 }
